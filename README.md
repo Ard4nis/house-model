@@ -148,6 +148,57 @@ src/house.scad
 
 Open this file in VS Code and use the Carve OpenSCAD preview to view the model.
 
+## Coordinate system
+
+The model uses a fixed Cartesian coordinate system based on the real-world orientation of the house.
+
+```text
+                     North
+                      +Y
+                       ↑
+                       │
+                       │
+       West  ←──────── O ────────→  East
+        -X           [0,0]          +X
+                       │
+                       │
+                       ↓
+                     South
+
+                      +Z
+                      ↑
+                      Up
+```
+
+The origin `[0, 0, 0]` is the south-west exterior corner of the main house footprint at finished-floor level.
+
+The axis conventions are:
+
+| Axis | Direction |
+|---|---|
+| `+X` | East |
+| `-X` | West |
+| `+Y` | North |
+| `-Y` | South |
+| `+Z` | Up |
+| `-Z` | Below finished-floor level |
+
+`Z = 0` always represents finished-floor level.
+
+Geometry below the finished floor, such as floor construction, joists, foundations, or other structural elements, may therefore use negative Z coordinates.
+
+Unless a module explicitly documents otherwise, rectangular objects are positioned using their south-west-bottom corner as their local origin.
+
+### Development axes
+
+The development scene can display coordinate reference axes:
+
+- red = `+X` / East
+- green = `+Y` / North
+- blue = `+Z` / Up
+
+These axes are development helpers and are not part of the house geometry.
+
 ## Modelling conventions
 
 All source dimensions are written in real-world millimetres.
