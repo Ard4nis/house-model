@@ -1,0 +1,39 @@
+{
+  "name": "House Model",
+
+  "build": {
+    "dockerfile": "Dockerfile"
+  },
+
+  "features": {
+    "ghcr.io/devcontainers/features/common-utils:2": {
+      "installZsh": true,
+      "configureZshAsDefaultShell": true,
+      "installOhMyZsh": true,
+      "username": "vscode"
+    },
+
+    "ghcr.io/devcontainers/features/node:2": {
+      "version": "24"
+    },
+
+    "ghcr.io/devcontainers/features/github-cli:1": {
+      "version": "latest"
+    },
+
+    "ghcr.io/devcontainer-community/devcontainer-features/starship.rs:1": {}
+  },
+
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "thijsdaniels.vscode-openscad-preview",
+        "Leathong.openscad-language-support"
+      ]
+    }
+  },
+
+  "postCreateCommand": "npm ci && bash .devcontainer/setup-shell.sh",
+
+  "remoteUser": "vscode"
+}

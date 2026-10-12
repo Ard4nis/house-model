@@ -1,0 +1,7 @@
+{
+  "eslint.enable": false,
+  "terminal.integrated.fontFamily": "MesloLGS NF",
+
+  "openscad.previewFormat": "stl",
+  "scad-lsp.launchPath": "openscad"
+}

@@ -1,0 +1,85 @@
+"$schema" = "https://starship.rs/config-schema.json"
+
+add_newline = true
+
+palette = "p10k"
+
+format = """
+[](fg:directory_bg)\
+$directory\
+[](fg:directory_bg bg:git_bg)\
+$git_branch\
+$git_status\
+[](fg:git_bg bg:node_bg)\
+$nodejs\
+[](fg:node_bg)\
+$line_break\
+$character"""
+
+right_format = """
+$cmd_duration\
+$time"""
+
+[palettes.p10k]
+directory_bg = "#3B82F6"
+directory_fg = "#FFFFFF"
+
+git_bg = "#A855F7"
+git_fg = "#FFFFFF"
+
+node_bg = "#22C55E"
+node_fg = "#111827"
+
+duration_bg = "#475569"
+duration_fg = "#FFFFFF"
+
+time_bg = "#334155"
+time_fg = "#FFFFFF"
+
+[directory]
+style = "fg:directory_fg bg:directory_bg"
+format = "[   $path ]($style)"
+truncation_length = 3
+truncate_to_repo = true
+read_only = " "
+
+[git_branch]
+symbol = " "
+style = "fg:git_fg bg:git_bg"
+format = "[ $symbol$branch]($style)"
+
+[git_status]
+style = "fg:git_fg bg:git_bg"
+format = "[$all_status$ahead_behind ]($style)"
+
+conflicted = " ="
+ahead = " ⇡${count}"
+behind = " ⇣${count}"
+diverged = " ⇕⇡${ahead_count}⇣${behind_count}"
+untracked = " ?"
+stashed = " $"
+modified = " !"
+staged = " +"
+renamed = " »"
+deleted = " ✘"
+
+[nodejs]
+symbol = " "
+style = "fg:node_fg bg:node_bg"
+format = "[ $symbol$version ]($style)"
+
+[cmd_duration]
+min_time = 1000
+style = "fg:duration_fg bg:duration_bg"
+format = "[](fg:duration_bg)[  $duration ]($style)"
+
+[time]
+disabled = false
+time_format = "%H:%M"
+style = "fg:time_fg bg:time_bg"
+format = "[](fg:time_bg)[  $time ]($style)"
+
+[character]
+success_symbol = "[❯](bold green)"
+error_symbol = "[❯](bold red)"
+vimcmd_symbol = "[❮](bold green)"
