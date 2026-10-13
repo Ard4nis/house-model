@@ -15,8 +15,7 @@
  *     Dimensions calculated from plan values and known wall thicknesses.
  *
  *   PROVISIONAL
- *     Deliberately rounded modelling values used where the historical
- *     drawing does not agree with itself closely enough to imply exactness.
+ *     Deliberately rounded or approximate modelling values.
  *
  * IMPORTANT:
  *
@@ -41,9 +40,6 @@ WALL_PARTITION = 100;
 // Known renovation dimensions
 // ===========================================================================
 
-// Current eastern extension.
-//
-// Extends east from the previous exterior wall.
 EAST_EXTENSION_WIDTH = 4000;
 
 
@@ -164,8 +160,6 @@ DERIVED_NORTH_BLOCK_DEPTH_DIFFERENCE =
 
 
 // PROVISIONAL.
-//
-// Historical-plan paths give 7980 and 7810 mm.
 NORTH_BLOCK_DEPTH = 7900;
 
 
@@ -213,8 +207,6 @@ DERIVED_SOUTH_BLOCK_DEPTH_DIFFERENCE =
 
 
 // PROVISIONAL.
-//
-// Historical-plan paths give 5450 and 5550 mm.
 SOUTH_BLOCK_DEPTH = 5500;
 
 
@@ -260,17 +252,6 @@ HOUSE_MAX_DEPTH =
 // ---------------------------------------------------------------------------
 // Former south exterior wall
 // ---------------------------------------------------------------------------
-//
-// This was the south exterior wall of the older northern house.
-//
-// It now separates:
-//
-//   Soveværelse / Stue
-//
-// from:
-//
-//   western Værelse / Alrum
-//
 
 LEGACY_SOUTH_WALL_X = 0;
 
@@ -284,32 +265,6 @@ LEGACY_SOUTH_WALL_LENGTH =
 // ---------------------------------------------------------------------------
 // 2013 former east exterior wall
 // ---------------------------------------------------------------------------
-//
-// The eastern block was added in 2013.
-//
-// Before that renovation, the exterior wall ran north-south immediately
-// east of Bryggers / Gang / Køkken.
-//
-// The wall begins after:
-//
-//   west exterior wall
-//   bathroom
-//   partition
-//   entrance
-//   partition
-//   bedroom
-//   partition
-//   bedroom
-//   partition
-//   Bryggers
-//
-// Its west face is therefore x = 11760 mm.
-//
-// This former exterior wall continues for the complete depth of the
-// northern block.
-//
-// Door openings through this wall will be subtracted later.
-//
 
 LEGACY_2013_EAST_WALL_X =
     WALL_EXTERIOR
@@ -334,17 +289,8 @@ LEGACY_2013_EAST_WALL_LENGTH =
 
 
 // ---------------------------------------------------------------------------
-// Former east exterior wall before current 4000 mm extension
+// Former east exterior wall before current extension
 // ---------------------------------------------------------------------------
-//
-// The current eastern extension starts at the previous outside face:
-//
-//   x = 17140 mm
-//
-// The retained 400 mm wall therefore occupies:
-//
-//   x = 16740 -> 17140
-//
 
 LEGACY_CURRENT_EXTENSION_WALL_X =
     NORTH_BLOCK_WIDTH
@@ -358,3 +304,153 @@ LEGACY_CURRENT_EXTENSION_WALL_Y =
 LEGACY_CURRENT_EXTENSION_WALL_LENGTH =
     HOUSE_MAX_DEPTH
     - NORTH_BLOCK_SOUTH_Y;
+
+
+// ===========================================================================
+// Southern-block vertical profile
+// ===========================================================================
+//
+// The southern block has a sloped ceiling.
+//
+// Heights are currently approximate.
+//
+// Heights are defined at the INSIDE faces of:
+//
+//   south exterior wall  -> y = 400
+//   north legacy wall    -> y = 5100
+//
+// This keeps the height definition directly meaningful to the usable rooms.
+//
+
+SOUTH_BLOCK_CEILING_SOUTH_Y =
+    WALL_EXTERIOR;
+
+
+SOUTH_BLOCK_CEILING_NORTH_Y =
+    NORTH_BLOCK_SOUTH_Y;
+
+
+// PROVISIONAL.
+SOUTH_BLOCK_CEILING_SOUTH_HEIGHT = 2200;
+
+
+// PROVISIONAL.
+SOUTH_BLOCK_CEILING_NORTH_HEIGHT = 2600;
+
+
+SOUTH_BLOCK_CEILING_RISE =
+    SOUTH_BLOCK_CEILING_NORTH_HEIGHT
+    - SOUTH_BLOCK_CEILING_SOUTH_HEIGHT;
+
+
+SOUTH_BLOCK_CEILING_RUN =
+    SOUTH_BLOCK_CEILING_NORTH_Y
+    - SOUTH_BLOCK_CEILING_SOUTH_Y;
+
+
+SOUTH_BLOCK_CEILING_SLOPE_ANGLE =
+    atan(
+        SOUTH_BLOCK_CEILING_RISE
+        / SOUTH_BLOCK_CEILING_RUN
+    );
+
+
+// Return the ceiling height at any Y coordinate.
+//
+// Values inside the room are interpolated linearly.
+//
+// The function also permits extrapolation beyond the inside wall faces,
+// which may later be useful when constructing the actual roof/wall geometry.
+function south_block_ceiling_height(y) =
+    SOUTH_BLOCK_CEILING_SOUTH_HEIGHT
+    + (
+        (y - SOUTH_BLOCK_CEILING_SOUTH_Y)
+        / SOUTH_BLOCK_CEILING_RUN
+    )
+    * SOUTH_BLOCK_CEILING_RISE;
+
+
+// ===========================================================================
+// Hailey's bedroom
+// ===========================================================================
+//
+// South-west bedroom in the southern block.
+//
+// Walls:
+//
+//   west  = current 400 mm exterior wall
+//   south = current 400 mm exterior wall
+//   north = retained 400 mm former exterior wall
+//   east  = normal 100 mm internal partition
+//
+// Clear room coordinates:
+//
+//   x = 400 -> 3400
+//   y = 400 -> 5100
+//
+// Clear model dimensions:
+//
+//   3000 x 4700 mm
+//
+// Historical drawing:
+//
+//   3000 x 4650 mm
+//
+// The model therefore differs from the historical depth label by only
+// 50 mm, which is well within the known uncertainty of the drawing.
+//
+
+HAILEY_ROOM_X =
+    WALL_EXTERIOR;
+
+
+HAILEY_ROOM_Y =
+    WALL_EXTERIOR;
+
+
+HAILEY_ROOM_WIDTH =
+    PLAN_SOUTH_BEDROOM_WIDTH;
+
+
+HAILEY_ROOM_DEPTH =
+    NORTH_BLOCK_SOUTH_Y
+    - WALL_EXTERIOR;
+
+
+HAILEY_ROOM_PLAN_DEPTH_DIFFERENCE =
+    HAILEY_ROOM_DEPTH
+    - PLAN_SOUTH_BEDROOM_DEPTH;
+
+
+// ---------------------------------------------------------------------------
+// Hailey / Stue partition
+// ---------------------------------------------------------------------------
+
+HAILEY_EAST_PARTITION_X =
+    HAILEY_ROOM_X
+    + HAILEY_ROOM_WIDTH;
+
+
+HAILEY_EAST_PARTITION_Y =
+    HAILEY_ROOM_Y;
+
+
+HAILEY_EAST_PARTITION_LENGTH =
+    HAILEY_ROOM_DEPTH;
+
+
+// ---------------------------------------------------------------------------
+// Hailey room ceiling heights
+// ---------------------------------------------------------------------------
+
+HAILEY_CEILING_SOUTH_HEIGHT =
+    south_block_ceiling_height(
+        HAILEY_ROOM_Y
+    );
+
+
+HAILEY_CEILING_NORTH_HEIGHT =
+    south_block_ceiling_height(
+        HAILEY_ROOM_Y
+        + HAILEY_ROOM_DEPTH
+    );

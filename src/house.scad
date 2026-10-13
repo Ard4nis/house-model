@@ -23,6 +23,7 @@ include <lib/coordinates.scad>
 include <house/dimensions.scad>
 include <house/footprint.scad>
 include <house/walls.scad>
+include <house/rooms.scad>
 
 
 // ===========================================================================
@@ -44,11 +45,27 @@ SHOW_EXTERIOR_WALLS = true;
 
 SHOW_LEGACY_WALLS = true;
 
+SHOW_PARTITION_WALLS = true;
+
+SHOW_ROOMS = true;
+
+
+// Filled 3D room volume beneath the real sloped ceiling.
+//
+// Normally keep this disabled because it obscures the wall layout.
+// Enable it when checking vertical geometry.
+SHOW_ROOM_VOLUMES = false;
+
 
 // DEVELOPMENT ONLY.
 //
-// Real wall height will be established later.
+// The complete wall system does not yet have authoritative height geometry.
 PREVIEW_WALL_HEIGHT = 1000;
+
+
+PREVIEW_ROOM_HEIGHT = 25;
+
+PREVIEW_ROOM_Z = 25;
 
 
 // ===========================================================================
@@ -183,6 +200,82 @@ echo(
 );
 
 
+// ---------------------------------------------------------------------------
+// Southern-block height profile
+// ---------------------------------------------------------------------------
+
+echo(
+    "South block ceiling height — south:",
+    SOUTH_BLOCK_CEILING_SOUTH_HEIGHT
+);
+
+echo(
+    "South block ceiling height — north:",
+    SOUTH_BLOCK_CEILING_NORTH_HEIGHT
+);
+
+echo(
+    "South block ceiling rise:",
+    SOUTH_BLOCK_CEILING_RISE
+);
+
+echo(
+    "South block ceiling run:",
+    SOUTH_BLOCK_CEILING_RUN
+);
+
+echo(
+    "South block ceiling slope angle:",
+    SOUTH_BLOCK_CEILING_SLOPE_ANGLE
+);
+
+
+// ---------------------------------------------------------------------------
+// Hailey's bedroom
+// ---------------------------------------------------------------------------
+
+echo(
+    "Hailey room origin:",
+    [
+        HAILEY_ROOM_X,
+        HAILEY_ROOM_Y
+    ]
+);
+
+echo(
+    "Hailey room clear size:",
+    [
+        HAILEY_ROOM_WIDTH,
+        HAILEY_ROOM_DEPTH
+    ]
+);
+
+echo(
+    "Hailey room plan-depth difference:",
+    HAILEY_ROOM_PLAN_DEPTH_DIFFERENCE
+);
+
+echo(
+    "Hailey east partition:",
+    [
+        HAILEY_EAST_PARTITION_X,
+        HAILEY_EAST_PARTITION_Y,
+        WALL_PARTITION,
+        HAILEY_EAST_PARTITION_LENGTH
+    ]
+);
+
+echo(
+    "Hailey ceiling height — south:",
+    HAILEY_CEILING_SOUTH_HEIGHT
+);
+
+echo(
+    "Hailey ceiling height — north:",
+    HAILEY_CEILING_NORTH_HEIGHT
+);
+
+
 // ===========================================================================
 // House geometry
 // ===========================================================================
@@ -191,6 +284,13 @@ module house() {
 
     if (SHOW_FOOTPRINT) {
         house_footprint_preview();
+    }
+
+    if (SHOW_ROOMS) {
+        rooms_preview(
+            height = PREVIEW_ROOM_HEIGHT,
+            z = PREVIEW_ROOM_Z
+        );
     }
 
     if (SHOW_EXTERIOR_WALLS) {
@@ -203,6 +303,16 @@ module house() {
         legacy_walls_preview(
             height = PREVIEW_WALL_HEIGHT
         );
+    }
+
+    if (SHOW_PARTITION_WALLS) {
+        partition_walls_preview(
+            height = PREVIEW_WALL_HEIGHT
+        );
+    }
+
+    if (SHOW_ROOM_VOLUMES) {
+        room_volumes_preview();
     }
 }
 

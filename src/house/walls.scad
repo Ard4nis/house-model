@@ -5,10 +5,9 @@
  *
  *   - current exterior wall shell
  *   - retained former exterior walls
+ *   - ordinary internal partitions
  *
  * Doors and windows are NOT modelled yet.
- *
- * All walls are therefore currently continuous solid construction.
  *
  * All source dimensions are real-world millimetres.
  */
@@ -67,14 +66,6 @@ module legacy_south_wall_2d() {
 // ---------------------------------------------------------------------------
 // 2013 former east exterior wall
 // ---------------------------------------------------------------------------
-//
-// This runs continuously from the north wall to the south wall.
-//
-// It separates the older house on the west from the eastern block added
-// during the 2013 renovation.
-//
-// Openings through it are intentionally ignored for now.
-//
 
 module legacy_2013_east_wall_2d() {
     translate([
@@ -91,10 +82,6 @@ module legacy_2013_east_wall_2d() {
 // ---------------------------------------------------------------------------
 // Former east exterior wall before current extension
 // ---------------------------------------------------------------------------
-//
-// This wall became internal when the current 4000 mm eastern extension
-// was added.
-//
 
 module legacy_current_extension_wall_2d() {
     translate([
@@ -124,6 +111,51 @@ module legacy_walls_2d() {
 
 
 // ===========================================================================
+// Ordinary internal partitions
+// ===========================================================================
+
+
+// ---------------------------------------------------------------------------
+// Hailey's bedroom / Stue
+// ---------------------------------------------------------------------------
+//
+// Normal 100 mm partition.
+//
+// The clear bedroom ends at x = 3400.
+//
+// The partition therefore occupies:
+//
+//   x = 3400 -> 3500
+//
+// Stue will later begin at:
+//
+//   x = 3500
+//
+
+module hailey_east_partition_2d() {
+    translate([
+        HAILEY_EAST_PARTITION_X,
+        HAILEY_EAST_PARTITION_Y
+    ])
+        square([
+            WALL_PARTITION,
+            HAILEY_EAST_PARTITION_LENGTH
+        ]);
+}
+
+
+// ---------------------------------------------------------------------------
+// Combined ordinary partitions
+// ---------------------------------------------------------------------------
+
+module partition_walls_2d() {
+    union() {
+        hailey_east_partition_2d();
+    }
+}
+
+
+// ===========================================================================
 // Combined wall plan
 // ===========================================================================
 
@@ -131,17 +163,23 @@ module house_walls_2d() {
     union() {
         exterior_walls_2d();
         legacy_walls_2d();
+        partition_walls_2d();
     }
 }
 
 
 // ===========================================================================
-// Preview geometry
+// Development preview geometry
 // ===========================================================================
 //
-// Real wall height has not yet been established.
+// We intentionally keep the whole wall plan at a common preview height
+// while reconstructing the layout.
 //
-// These extrusions are development geometry only.
+// Real vertical wall profiles are being recorded in dimensions.scad and
+// room definitions as they become known.
+//
+// Once enough of the layout is established, the diagnostic extrusion will
+// be replaced by real 3D wall geometry.
 //
 
 module exterior_walls_preview(
@@ -157,6 +195,14 @@ module legacy_walls_preview(
 ) {
     linear_extrude(height = height)
         legacy_walls_2d();
+}
+
+
+module partition_walls_preview(
+    height = 1000
+) {
+    linear_extrude(height = height)
+        partition_walls_2d();
 }
 
 
