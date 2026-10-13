@@ -1,37 +1,22 @@
 /*
  * House walls
  *
- * Current exterior walls are generated directly from the present-day
- * exterior footprint.
+ * Contains:
  *
- * The exterior wall shell is defined as:
+ *   - current exterior wall shell
+ *   - retained former exterior walls
  *
- *   current footprint
- *   MINUS
- *   the same footprint inset by the exterior wall thickness
+ * Doors and windows are NOT modelled yet.
  *
- * This means changes to the footprint automatically propagate to the
- * exterior walls.
+ * All walls are therefore currently continuous solid construction.
  *
  * All source dimensions are real-world millimetres.
- *
- * Dependencies:
- *
- *   dimensions.scad
- *   footprint.scad
  */
 
 
 // ===========================================================================
-// Current interior envelope
+// Current exterior envelope
 // ===========================================================================
-//
-// Represents the inside face of the CURRENT exterior walls.
-//
-// This is useful independently of the wall shell because later room,
-// flooring and internal-wall geometry can reference the inside face of the
-// exterior envelope.
-//
 
 module house_inner_envelope_2d(
     thickness = WALL_EXTERIOR
@@ -44,15 +29,6 @@ module house_inner_envelope_2d(
 // ===========================================================================
 // Current exterior walls
 // ===========================================================================
-//
-// Subtracting the inset footprint from the full exterior footprint gives us
-// a uniform wall shell around the complete present-day perimeter.
-//
-// This includes the exposed wall at the L-shaped step.
-//
-// It intentionally does NOT include any retained former exterior walls,
-// because those are now internal construction and will be added separately.
-//
 
 module exterior_walls_2d(
     thickness = WALL_EXTERIOR
@@ -68,22 +44,125 @@ module exterior_walls_2d(
 
 
 // ===========================================================================
+// Retained former exterior walls
+// ===========================================================================
+
+
+// ---------------------------------------------------------------------------
+// Former south exterior wall
+// ---------------------------------------------------------------------------
+
+module legacy_south_wall_2d() {
+    translate([
+        LEGACY_SOUTH_WALL_X,
+        LEGACY_SOUTH_WALL_Y
+    ])
+        square([
+            LEGACY_SOUTH_WALL_LENGTH,
+            WALL_LEGACY_EXTERIOR
+        ]);
+}
+
+
+// ---------------------------------------------------------------------------
+// 2013 former east exterior wall
+// ---------------------------------------------------------------------------
+//
+// This runs continuously from the north wall to the south wall.
+//
+// It separates the older house on the west from the eastern block added
+// during the 2013 renovation.
+//
+// Openings through it are intentionally ignored for now.
+//
+
+module legacy_2013_east_wall_2d() {
+    translate([
+        LEGACY_2013_EAST_WALL_X,
+        LEGACY_2013_EAST_WALL_Y
+    ])
+        square([
+            WALL_LEGACY_EXTERIOR,
+            LEGACY_2013_EAST_WALL_LENGTH
+        ]);
+}
+
+
+// ---------------------------------------------------------------------------
+// Former east exterior wall before current extension
+// ---------------------------------------------------------------------------
+//
+// This wall became internal when the current 4000 mm eastern extension
+// was added.
+//
+
+module legacy_current_extension_wall_2d() {
+    translate([
+        LEGACY_CURRENT_EXTENSION_WALL_X,
+        LEGACY_CURRENT_EXTENSION_WALL_Y
+    ])
+        square([
+            WALL_LEGACY_EXTERIOR,
+            LEGACY_CURRENT_EXTENSION_WALL_LENGTH
+        ]);
+}
+
+
+// ---------------------------------------------------------------------------
+// Combined legacy construction
+// ---------------------------------------------------------------------------
+
+module legacy_walls_2d() {
+    union() {
+        legacy_south_wall_2d();
+
+        legacy_2013_east_wall_2d();
+
+        legacy_current_extension_wall_2d();
+    }
+}
+
+
+// ===========================================================================
+// Combined wall plan
+// ===========================================================================
+
+module house_walls_2d() {
+    union() {
+        exterior_walls_2d();
+        legacy_walls_2d();
+    }
+}
+
+
+// ===========================================================================
 // Preview geometry
 // ===========================================================================
 //
-// We do not yet know the authoritative real-world wall height.
+// Real wall height has not yet been established.
 //
-// The supplied height is therefore DEVELOPMENT/PREVIEW geometry only.
-// Real wall height will be introduced later when we model the vertical
-// structure of the house.
+// These extrusions are development geometry only.
 //
 
 module exterior_walls_preview(
-    height = 1000,
-    thickness = WALL_EXTERIOR
+    height = 1000
 ) {
     linear_extrude(height = height)
-        exterior_walls_2d(
-            thickness = thickness
-        );
+        exterior_walls_2d();
+}
+
+
+module legacy_walls_preview(
+    height = 1000
+) {
+    linear_extrude(height = height)
+        legacy_walls_2d();
+}
+
+
+module house_walls_preview(
+    height = 1000
+) {
+    linear_extrude(height = height)
+        house_walls_2d();
 }

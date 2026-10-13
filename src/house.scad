@@ -29,7 +29,6 @@ include <house/walls.scad>
 // Model configuration
 // ===========================================================================
 
-// Intended physical miniature scale.
 MINIATURE_SCALE = 1 / 50;
 
 
@@ -39,19 +38,16 @@ MINIATURE_SCALE = 1 / 50;
 
 SHOW_COORDINATE_AXES = true;
 
-// Keep the solid footprint disabled while working on walls so the interior
-// void remains clearly visible.
 SHOW_FOOTPRINT = false;
 
 SHOW_EXTERIOR_WALLS = true;
 
+SHOW_LEGACY_WALLS = true;
 
-// We do not yet have an authoritative physical wall height.
+
+// DEVELOPMENT ONLY.
 //
-// 1000 mm is used purely as a convenient development extrusion so that the
-// wall layout is easy to inspect in the 3D preview.
-//
-// Do not treat this value as part of the architectural model.
+// Real wall height will be established later.
 PREVIEW_WALL_HEIGHT = 1000;
 
 
@@ -150,18 +146,40 @@ echo(
 );
 
 echo(
-    "Footprint points:",
-    HOUSE_FOOTPRINT_POINTS
-);
-
-echo(
     "Exterior wall thickness:",
     WALL_EXTERIOR
 );
 
 echo(
-    "Exterior wall thickness at current miniature scale:",
-    WALL_EXTERIOR * MINIATURE_SCALE
+    "Legacy wall thickness:",
+    WALL_LEGACY_EXTERIOR
+);
+
+echo(
+    "Legacy south wall:",
+    [
+        LEGACY_SOUTH_WALL_X,
+        LEGACY_SOUTH_WALL_Y,
+        LEGACY_SOUTH_WALL_LENGTH
+    ]
+);
+
+echo(
+    "2013 legacy east wall:",
+    [
+        LEGACY_2013_EAST_WALL_X,
+        LEGACY_2013_EAST_WALL_Y,
+        LEGACY_2013_EAST_WALL_LENGTH
+    ]
+);
+
+echo(
+    "Current-extension legacy wall:",
+    [
+        LEGACY_CURRENT_EXTENSION_WALL_X,
+        LEGACY_CURRENT_EXTENSION_WALL_Y,
+        LEGACY_CURRENT_EXTENSION_WALL_LENGTH
+    ]
 );
 
 
@@ -177,6 +195,12 @@ module house() {
 
     if (SHOW_EXTERIOR_WALLS) {
         exterior_walls_preview(
+            height = PREVIEW_WALL_HEIGHT
+        );
+    }
+
+    if (SHOW_LEGACY_WALLS) {
+        legacy_walls_preview(
             height = PREVIEW_WALL_HEIGHT
         );
     }
@@ -199,11 +223,6 @@ module scene() {
 // ===========================================================================
 // Output
 // ===========================================================================
-//
-// All architectural geometry above remains in real-world millimetres.
-//
-// Miniature scaling occurs only here at the final output boundary.
-//
 
 scale([
     MINIATURE_SCALE,
