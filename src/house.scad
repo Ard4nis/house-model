@@ -22,6 +22,7 @@ include <lib/coordinates.scad>
 
 include <house/dimensions.scad>
 include <house/footprint.scad>
+include <house/walls.scad>
 
 
 // ===========================================================================
@@ -37,7 +38,21 @@ MINIATURE_SCALE = 1 / 50;
 // ===========================================================================
 
 SHOW_COORDINATE_AXES = true;
-SHOW_FOOTPRINT = true;
+
+// Keep the solid footprint disabled while working on walls so the interior
+// void remains clearly visible.
+SHOW_FOOTPRINT = false;
+
+SHOW_EXTERIOR_WALLS = true;
+
+
+// We do not yet have an authoritative physical wall height.
+//
+// 1000 mm is used purely as a convenient development extrusion so that the
+// wall layout is easy to inspect in the 3D preview.
+//
+// Do not treat this value as part of the architectural model.
+PREVIEW_WALL_HEIGHT = 1000;
 
 
 // ===========================================================================
@@ -139,14 +154,31 @@ echo(
     HOUSE_FOOTPRINT_POINTS
 );
 
+echo(
+    "Exterior wall thickness:",
+    WALL_EXTERIOR
+);
+
+echo(
+    "Exterior wall thickness at current miniature scale:",
+    WALL_EXTERIOR * MINIATURE_SCALE
+);
+
 
 // ===========================================================================
 // House geometry
 // ===========================================================================
 
 module house() {
+
     if (SHOW_FOOTPRINT) {
         house_footprint_preview();
+    }
+
+    if (SHOW_EXTERIOR_WALLS) {
+        exterior_walls_preview(
+            height = PREVIEW_WALL_HEIGHT
+        );
     }
 }
 
@@ -168,9 +200,9 @@ module scene() {
 // Output
 // ===========================================================================
 //
-// All geometry above remains in real-world millimetres.
+// All architectural geometry above remains in real-world millimetres.
 //
-// Miniature scaling occurs only here, at the final output boundary.
+// Miniature scaling occurs only here at the final output boundary.
 //
 
 scale([
