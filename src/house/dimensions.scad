@@ -213,12 +213,6 @@ SOUTH_BLOCK_DEPTH = 5500;
 // ===========================================================================
 // Block relationships
 // ===========================================================================
-//
-// Shared former exterior wall:
-//
-//   south face = y 5100
-//   north face = y 5500
-//
 
 NORTH_BLOCK_SOUTH_Y =
     SOUTH_BLOCK_DEPTH
@@ -314,12 +308,15 @@ LEGACY_CURRENT_EXTENSION_WALL_LENGTH =
 //
 // Heights are currently approximate.
 //
-// Heights are defined at the INSIDE faces of:
+// South inside face:
 //
-//   south exterior wall  -> y = 400
-//   north legacy wall    -> y = 5100
+//   y = 400
+//   height = 2200
 //
-// This keeps the height definition directly meaningful to the usable rooms.
+// North inside face:
+//
+//   y = 5100
+//   height = 2600
 //
 
 SOUTH_BLOCK_CEILING_SOUTH_Y =
@@ -355,12 +352,6 @@ SOUTH_BLOCK_CEILING_SLOPE_ANGLE =
     );
 
 
-// Return the ceiling height at any Y coordinate.
-//
-// Values inside the room are interpolated linearly.
-//
-// The function also permits extrapolation beyond the inside wall faces,
-// which may later be useful when constructing the actual roof/wall geometry.
 function south_block_ceiling_height(y) =
     SOUTH_BLOCK_CEILING_SOUTH_HEIGHT
     + (
@@ -373,32 +364,6 @@ function south_block_ceiling_height(y) =
 // ===========================================================================
 // Hailey's bedroom
 // ===========================================================================
-//
-// South-west bedroom in the southern block.
-//
-// Walls:
-//
-//   west  = current 400 mm exterior wall
-//   south = current 400 mm exterior wall
-//   north = retained 400 mm former exterior wall
-//   east  = normal 100 mm internal partition
-//
-// Clear room coordinates:
-//
-//   x = 400 -> 3400
-//   y = 400 -> 5100
-//
-// Clear model dimensions:
-//
-//   3000 x 4700 mm
-//
-// Historical drawing:
-//
-//   3000 x 4650 mm
-//
-// The model therefore differs from the historical depth label by only
-// 50 mm, which is well within the known uncertainty of the drawing.
-//
 
 HAILEY_ROOM_X =
     WALL_EXTERIOR;
@@ -453,4 +418,83 @@ HAILEY_CEILING_NORTH_HEIGHT =
     south_block_ceiling_height(
         HAILEY_ROOM_Y
         + HAILEY_ROOM_DEPTH
+    );
+
+
+// ===========================================================================
+// Stue
+// ===========================================================================
+//
+// Stue occupies the remainder of the clear southern-block interior east of
+// Hailey's partition.
+//
+// Boundaries:
+//
+//   west  = Hailey / Stue 100 mm partition
+//   east  = current 400 mm exterior wall
+//   south = current 400 mm exterior wall
+//   north = retained 400 mm former exterior wall
+//
+//
+// Clear coordinates:
+//
+//   x = 3500 -> 9500
+//   y = 400  -> 5100
+//
+// Model clear dimensions:
+//
+//   6000 x 4700 mm
+//
+// Historical plan:
+//
+//   6000 x 4750 mm
+//
+
+STUE_ROOM_X =
+    HAILEY_EAST_PARTITION_X
+    + WALL_PARTITION;
+
+
+STUE_ROOM_Y =
+    WALL_EXTERIOR;
+
+
+STUE_ROOM_WIDTH =
+    (SOUTH_BLOCK_WIDTH - WALL_EXTERIOR)
+    - STUE_ROOM_X;
+
+
+STUE_ROOM_DEPTH =
+    NORTH_BLOCK_SOUTH_Y
+    - WALL_EXTERIOR;
+
+
+// ---------------------------------------------------------------------------
+// Stue plan cross-checks
+// ---------------------------------------------------------------------------
+
+STUE_ROOM_PLAN_WIDTH_DIFFERENCE =
+    STUE_ROOM_WIDTH
+    - PLAN_LIVING_ROOM_WIDTH;
+
+
+STUE_ROOM_PLAN_DEPTH_DIFFERENCE =
+    STUE_ROOM_DEPTH
+    - PLAN_LIVING_ROOM_DEPTH;
+
+
+// ---------------------------------------------------------------------------
+// Stue ceiling heights
+// ---------------------------------------------------------------------------
+
+STUE_CEILING_SOUTH_HEIGHT =
+    south_block_ceiling_height(
+        STUE_ROOM_Y
+    );
+
+
+STUE_CEILING_NORTH_HEIGHT =
+    south_block_ceiling_height(
+        STUE_ROOM_Y
+        + STUE_ROOM_DEPTH
     );

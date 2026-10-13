@@ -50,10 +50,9 @@ SHOW_PARTITION_WALLS = true;
 SHOW_ROOMS = true;
 
 
-// Filled 3D room volume beneath the real sloped ceiling.
+// Filled room volumes beneath their known ceiling profiles.
 //
-// Normally keep this disabled because it obscures the wall layout.
-// Enable it when checking vertical geometry.
+// Normally leave disabled while laying out the floor plan.
 SHOW_ROOM_VOLUMES = false;
 
 
@@ -71,6 +70,11 @@ PREVIEW_ROOM_Z = 25;
 // ===========================================================================
 // Dimension diagnostics
 // ===========================================================================
+
+
+// ---------------------------------------------------------------------------
+// Main house geometry
+// ---------------------------------------------------------------------------
 
 echo(
     "North row clear width:",
@@ -161,6 +165,11 @@ echo(
     "House maximum depth:",
     HOUSE_MAX_DEPTH
 );
+
+
+// ---------------------------------------------------------------------------
+// Wall construction
+// ---------------------------------------------------------------------------
 
 echo(
     "Exterior wall thickness:",
@@ -273,6 +282,47 @@ echo(
 echo(
     "Hailey ceiling height — north:",
     HAILEY_CEILING_NORTH_HEIGHT
+);
+
+
+// ---------------------------------------------------------------------------
+// Stue
+// ---------------------------------------------------------------------------
+
+echo(
+    "Stue origin:",
+    [
+        STUE_ROOM_X,
+        STUE_ROOM_Y
+    ]
+);
+
+echo(
+    "Stue clear size:",
+    [
+        STUE_ROOM_WIDTH,
+        STUE_ROOM_DEPTH
+    ]
+);
+
+echo(
+    "Stue plan-width difference:",
+    STUE_ROOM_PLAN_WIDTH_DIFFERENCE
+);
+
+echo(
+    "Stue plan-depth difference:",
+    STUE_ROOM_PLAN_DEPTH_DIFFERENCE
+);
+
+echo(
+    "Stue ceiling height — south:",
+    STUE_CEILING_SOUTH_HEIGHT
+);
+
+echo(
+    "Stue ceiling height — north:",
+    STUE_CEILING_NORTH_HEIGHT
 );
 
 

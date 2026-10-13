@@ -1,7 +1,7 @@
 /*
  * Room layout
  *
- * Aggregates the individual room definitions.
+ * Aggregates individual room definitions.
  *
  * Room modules define CLEAR INTERIOR SPACE.
  *
@@ -10,6 +10,7 @@
 
 
 include <rooms/hailey_bedroom.scad>
+include <rooms/stue.scad>
 
 
 // ===========================================================================
@@ -19,6 +20,7 @@ include <rooms/hailey_bedroom.scad>
 module rooms_2d() {
     union() {
         hailey_bedroom_2d();
+        stue_2d();
     }
 }
 
@@ -35,9 +37,15 @@ module rooms_preview(
         height = height,
         z = z
     );
+
+    stue_preview(
+        height = height,
+        z = z
+    );
 }
 
 
 module room_volumes_preview() {
     hailey_bedroom_volume_3d();
+    stue_volume_3d();
 }
