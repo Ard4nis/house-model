@@ -1,16 +1,33 @@
 /*
  * HomeOpenSCAD house model
  *
+ * The project models the house primarily as a printable 3D floor plan.
+ *
+ * Intended geometry includes:
+ *
+ *   - floors
+ *   - walls
+ *   - doors
+ *   - windows
+ *   - stairs
+ *   - fixed architectural features
+ *   - optional furniture
+ *
+ * It is NOT intended to become a complete roof/structural house model.
+ *
+ *
  * All source dimensions are real-world millimetres.
  *
  * Coordinate system:
  *
  *   Origin = south-west exterior corner of the current house footprint
- *            at finished-floor level
+ *            at main-house finished-floor level
  *
  *   +X = East
  *   +Y = North
  *   +Z = Up
+ *
+ *   Main finished floor = Z 0
  */
 
 
@@ -24,6 +41,7 @@ include <house/dimensions.scad>
 include <house/footprint.scad>
 include <house/walls.scad>
 include <house/rooms.scad>
+include <house/features.scad>
 
 
 // ===========================================================================
@@ -47,19 +65,24 @@ SHOW_LEGACY_WALLS = true;
 
 SHOW_PARTITION_WALLS = true;
 
+SHOW_HALF_WALLS = true;
+
 SHOW_ROOMS = true;
 
-
-// Filled room volumes beneath their known ceiling profiles.
-//
-// Normally leave disabled while laying out the floor plan.
-SHOW_ROOM_VOLUMES = false;
+SHOW_SKYLIGHT_MARKERS = true;
 
 
-// DEVELOPMENT ONLY.
-//
-// The complete wall system does not yet have authoritative height geometry.
+// ---------------------------------------------------------------------------
+// Development-only preview dimensions
+// ---------------------------------------------------------------------------
+
+// The wall layout still uses a common diagnostic height while we establish
+// the complete floor plan.
 PREVIEW_WALL_HEIGHT = 1000;
+
+
+// Actual half-wall height has not yet been measured.
+PREVIEW_HALF_WALL_HEIGHT = 1000;
 
 
 PREVIEW_ROOM_HEIGHT = 25;
@@ -67,13 +90,18 @@ PREVIEW_ROOM_HEIGHT = 25;
 PREVIEW_ROOM_Z = 25;
 
 
+PREVIEW_FEATURE_HEIGHT = 25;
+
+PREVIEW_FEATURE_Z = 75;
+
+
 // ===========================================================================
-// Dimension diagnostics
+// Diagnostics
 // ===========================================================================
 
 
 // ---------------------------------------------------------------------------
-// Main house geometry
+// Overall house
 // ---------------------------------------------------------------------------
 
 echo(
@@ -82,28 +110,8 @@ echo(
 );
 
 echo(
-    "North block width — derived:",
-    DERIVED_NORTH_BLOCK_WIDTH
-);
-
-echo(
     "North block width — modelling value:",
     NORTH_BLOCK_WIDTH
-);
-
-echo(
-    "North block depth — west derivation:",
-    DERIVED_NORTH_BLOCK_DEPTH_WEST
-);
-
-echo(
-    "North block depth — east derivation:",
-    DERIVED_NORTH_BLOCK_DEPTH_EAST
-);
-
-echo(
-    "North block depth — discrepancy:",
-    DERIVED_NORTH_BLOCK_DEPTH_DIFFERENCE
 );
 
 echo(
@@ -112,48 +120,13 @@ echo(
 );
 
 echo(
-    "South block width — derived:",
-    DERIVED_SOUTH_BLOCK_WIDTH
-);
-
-echo(
     "South block width — modelling value:",
     SOUTH_BLOCK_WIDTH
 );
 
 echo(
-    "South block depth — west derivation:",
-    DERIVED_SOUTH_BLOCK_DEPTH_WEST
-);
-
-echo(
-    "South block depth — east derivation:",
-    DERIVED_SOUTH_BLOCK_DEPTH_EAST
-);
-
-echo(
-    "South block depth — discrepancy:",
-    DERIVED_SOUTH_BLOCK_DEPTH_DIFFERENCE
-);
-
-echo(
     "South block depth — provisional modelling value:",
     SOUTH_BLOCK_DEPTH
-);
-
-echo(
-    "North block south Y:",
-    NORTH_BLOCK_SOUTH_Y
-);
-
-echo(
-    "House total depth:",
-    HOUSE_TOTAL_DEPTH
-);
-
-echo(
-    "Eastern extension width:",
-    EAST_EXTENSION_WIDTH
 );
 
 echo(
@@ -168,18 +141,28 @@ echo(
 
 
 // ---------------------------------------------------------------------------
-// Wall construction
+// Floor levels
 // ---------------------------------------------------------------------------
 
 echo(
-    "Exterior wall thickness:",
-    WALL_EXTERIOR
+    "Main house floor Z:",
+    MAIN_FLOOR_Z
 );
 
 echo(
-    "Legacy wall thickness:",
-    WALL_LEGACY_EXTERIOR
+    "East extension floor drop:",
+    EAST_EXTENSION_FLOOR_DROP
 );
+
+echo(
+    "East extension floor Z:",
+    EAST_EXTENSION_FLOOR_Z
+);
+
+
+// ---------------------------------------------------------------------------
+// Structural walls
+// ---------------------------------------------------------------------------
 
 echo(
     "Legacy south wall:",
@@ -210,37 +193,27 @@ echo(
 
 
 // ---------------------------------------------------------------------------
-// Southern-block height profile
+// Southern-block wall heights
 // ---------------------------------------------------------------------------
 
 echo(
-    "South block ceiling height — south:",
+    "South block wall height — south:",
     SOUTH_BLOCK_CEILING_SOUTH_HEIGHT
 );
 
 echo(
-    "South block ceiling height — north:",
+    "South block wall height — north:",
     SOUTH_BLOCK_CEILING_NORTH_HEIGHT
 );
 
 echo(
-    "South block ceiling rise:",
-    SOUTH_BLOCK_CEILING_RISE
-);
-
-echo(
-    "South block ceiling run:",
-    SOUTH_BLOCK_CEILING_RUN
-);
-
-echo(
-    "South block ceiling slope angle:",
+    "South block slope angle:",
     SOUTH_BLOCK_CEILING_SLOPE_ANGLE
 );
 
 
 // ---------------------------------------------------------------------------
-// Hailey's bedroom
+// Hailey
 // ---------------------------------------------------------------------------
 
 echo(
@@ -257,31 +230,6 @@ echo(
         HAILEY_ROOM_WIDTH,
         HAILEY_ROOM_DEPTH
     ]
-);
-
-echo(
-    "Hailey room plan-depth difference:",
-    HAILEY_ROOM_PLAN_DEPTH_DIFFERENCE
-);
-
-echo(
-    "Hailey east partition:",
-    [
-        HAILEY_EAST_PARTITION_X,
-        HAILEY_EAST_PARTITION_Y,
-        WALL_PARTITION,
-        HAILEY_EAST_PARTITION_LENGTH
-    ]
-);
-
-echo(
-    "Hailey ceiling height — south:",
-    HAILEY_CEILING_SOUTH_HEIGHT
-);
-
-echo(
-    "Hailey ceiling height — north:",
-    HAILEY_CEILING_NORTH_HEIGHT
 );
 
 
@@ -305,24 +253,85 @@ echo(
     ]
 );
 
+
+// ---------------------------------------------------------------------------
+// Alrum
+// ---------------------------------------------------------------------------
+
 echo(
-    "Stue plan-width difference:",
-    STUE_ROOM_PLAN_WIDTH_DIFFERENCE
+    "Alrum origin:",
+    [
+        ALRUM_ROOM_X,
+        ALRUM_ROOM_Y
+    ]
 );
 
 echo(
-    "Stue plan-depth difference:",
-    STUE_ROOM_PLAN_DEPTH_DIFFERENCE
+    "Alrum provisional clear envelope:",
+    [
+        ALRUM_ROOM_WIDTH,
+        ALRUM_ROOM_DEPTH
+    ]
 );
 
 echo(
-    "Stue ceiling height — south:",
-    STUE_CEILING_SOUTH_HEIGHT
+    "Alrum provisional north boundary:",
+    ALRUM_ROOM_NORTH_Y
 );
 
 echo(
-    "Stue ceiling height — north:",
-    STUE_CEILING_NORTH_HEIGHT
+    "Alrum west partition:",
+    [
+        ALRUM_WEST_PARTITION_X,
+        ALRUM_WEST_PARTITION_Y,
+        WALL_PARTITION,
+        ALRUM_WEST_PARTITION_LENGTH
+    ]
+);
+
+echo(
+    "Alrum half-wall:",
+    [
+        ALRUM_HALF_WALL_X,
+        ALRUM_HALF_WALL_Y,
+        ALRUM_HALF_WALL_THICKNESS,
+        ALRUM_HALF_WALL_LENGTH
+    ]
+);
+
+echo(
+    "Kitchen zone:",
+    [
+        ALRUM_KITCHEN_X,
+        ALRUM_KITCHEN_Y,
+        ALRUM_KITCHEN_WIDTH,
+        ALRUM_KITCHEN_DEPTH
+    ]
+);
+
+echo(
+    "Gang zone:",
+    [
+        ALRUM_GANG_X,
+        ALRUM_GANG_Y,
+        ALRUM_GANG_WIDTH,
+        ALRUM_GANG_DEPTH
+    ]
+);
+
+echo(
+    "Gang approximate area m2:",
+    ALRUM_GANG_AREA_M2
+);
+
+echo(
+    "Alrum skylight:",
+    [
+        ALRUM_SKYLIGHT_X,
+        ALRUM_SKYLIGHT_Y,
+        ALRUM_SKYLIGHT_WIDTH,
+        ALRUM_SKYLIGHT_DEPTH
+    ]
 );
 
 
@@ -336,6 +345,7 @@ module house() {
         house_footprint_preview();
     }
 
+
     if (SHOW_ROOMS) {
         rooms_preview(
             height = PREVIEW_ROOM_HEIGHT,
@@ -343,11 +353,13 @@ module house() {
         );
     }
 
+
     if (SHOW_EXTERIOR_WALLS) {
         exterior_walls_preview(
             height = PREVIEW_WALL_HEIGHT
         );
     }
+
 
     if (SHOW_LEGACY_WALLS) {
         legacy_walls_preview(
@@ -355,14 +367,26 @@ module house() {
         );
     }
 
+
     if (SHOW_PARTITION_WALLS) {
         partition_walls_preview(
             height = PREVIEW_WALL_HEIGHT
         );
     }
 
-    if (SHOW_ROOM_VOLUMES) {
-        room_volumes_preview();
+
+    if (SHOW_HALF_WALLS) {
+        half_walls_preview(
+            height = PREVIEW_HALF_WALL_HEIGHT
+        );
+    }
+
+
+    if (SHOW_SKYLIGHT_MARKERS) {
+        feature_markers_preview(
+            height = PREVIEW_FEATURE_HEIGHT,
+            z = PREVIEW_FEATURE_Z
+        );
     }
 }
 
@@ -383,6 +407,11 @@ module scene() {
 // ===========================================================================
 // Output
 // ===========================================================================
+//
+// All architectural geometry above remains in real-world millimetres.
+//
+// Miniature scaling occurs only here.
+//
 
 scale([
     MINIATURE_SCALE,

@@ -5,12 +5,18 @@
  *
  * Room modules define CLEAR INTERIOR SPACE.
  *
- * They do not own walls and they do not form the final printable floor.
+ * They do not own walls.
+ *
+ * They also do not form the final printable floor.
+ *
+ * The final floor will be derived separately from the complete house
+ * footprint once the room/wall layout has been established.
  */
 
 
 include <rooms/hailey_bedroom.scad>
 include <rooms/stue.scad>
+include <rooms/alrum.scad>
 
 
 // ===========================================================================
@@ -20,13 +26,16 @@ include <rooms/stue.scad>
 module rooms_2d() {
     union() {
         hailey_bedroom_2d();
+
         stue_2d();
+
+        alrum_2d();
     }
 }
 
 
 // ===========================================================================
-// Development previews
+// Development preview
 // ===========================================================================
 
 module rooms_preview(
@@ -42,10 +51,9 @@ module rooms_preview(
         height = height,
         z = z
     );
-}
 
-
-module room_volumes_preview() {
-    hailey_bedroom_volume_3d();
-    stue_volume_3d();
+    alrum_preview(
+        height = height,
+        z = z
+    );
 }

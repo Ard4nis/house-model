@@ -26,6 +26,27 @@
 
 
 // ===========================================================================
+// Vertical reference levels
+// ===========================================================================
+
+// Main-house finished floor.
+//
+// This remains the global Z reference for the project.
+MAIN_FLOOR_Z = 0;
+
+
+// Current eastern addition is approximately 300 mm lower than the
+// rest of the house.
+//
+// PROVISIONAL until directly measured.
+EAST_EXTENSION_FLOOR_DROP = 300;
+
+EAST_EXTENSION_FLOOR_Z =
+    MAIN_FLOOR_Z
+    - EAST_EXTENSION_FLOOR_DROP;
+
+
+// ===========================================================================
 // Wall construction
 // ===========================================================================
 
@@ -40,6 +61,7 @@ WALL_PARTITION = 100;
 // Known renovation dimensions
 // ===========================================================================
 
+// Current eastern extension measured east from the previous exterior wall.
 EAST_EXTENSION_WIDTH = 4000;
 
 
@@ -53,6 +75,9 @@ EAST_EXTENSION_WIDTH = 4000;
 // ---------------------------------------------------------------------------
 
 PLAN_NW_BATH_DEPTH = 2830;
+
+// Clear east-west width of the western bedroom beside Alrum.
+PLAN_WEST_BEDROOM_WIDTH = 2700;
 
 PLAN_WEST_BEDROOM_DEPTH = 4250;
 
@@ -85,7 +110,14 @@ PLAN_NORTH_SMALL_SECTION_WIDTH = 1500;
 PLAN_NE_BEDROOM_WIDTH = 2980;
 
 
-// Bryggers clear north-south dimension.
+// Several of the northern rooms are labelled approximately 3200 mm deep
+// on the historical drawing.
+//
+// Used only as a provisional layout anchor.
+PLAN_NORTH_ROW_ROOM_DEPTH = 3200;
+
+
+// Bryggers clear north-south depth.
 PLAN_UTILITY_DEPTH = 2640;
 
 
@@ -129,7 +161,8 @@ DERIVED_NORTH_BLOCK_WIDTH =
     + WALL_EXTERIOR;
 
 
-NORTH_BLOCK_WIDTH = DERIVED_NORTH_BLOCK_WIDTH;
+NORTH_BLOCK_WIDTH =
+    DERIVED_NORTH_BLOCK_WIDTH;
 
 
 // ---------------------------------------------------------------------------
@@ -167,11 +200,6 @@ NORTH_BLOCK_DEPTH = 7900;
 // Derived southern-block dimensions
 // ===========================================================================
 
-
-// ---------------------------------------------------------------------------
-// Southern block width
-// ---------------------------------------------------------------------------
-
 DERIVED_SOUTH_BLOCK_WIDTH =
     WALL_EXTERIOR
     + PLAN_SOUTH_BEDROOM_WIDTH
@@ -180,12 +208,9 @@ DERIVED_SOUTH_BLOCK_WIDTH =
     + WALL_EXTERIOR;
 
 
-SOUTH_BLOCK_WIDTH = DERIVED_SOUTH_BLOCK_WIDTH;
+SOUTH_BLOCK_WIDTH =
+    DERIVED_SOUTH_BLOCK_WIDTH;
 
-
-// ---------------------------------------------------------------------------
-// Southern block depth
-// ---------------------------------------------------------------------------
 
 DERIVED_SOUTH_BLOCK_DEPTH_WEST =
     WALL_LEGACY_EXTERIOR
@@ -214,6 +239,7 @@ SOUTH_BLOCK_DEPTH = 5500;
 // Block relationships
 // ===========================================================================
 
+// South face of the retained legacy wall.
 NORTH_BLOCK_SOUTH_Y =
     SOUTH_BLOCK_DEPTH
     - WALL_LEGACY_EXTERIOR;
@@ -236,6 +262,12 @@ HOUSE_MAX_WIDTH =
 
 HOUSE_MAX_DEPTH =
     HOUSE_TOTAL_DEPTH;
+
+
+// Current inside face of the north exterior wall.
+HOUSE_NORTH_INTERIOR_Y =
+    HOUSE_MAX_DEPTH
+    - WALL_EXTERIOR;
 
 
 // ===========================================================================
@@ -301,22 +333,13 @@ LEGACY_CURRENT_EXTENSION_WALL_LENGTH =
 
 
 // ===========================================================================
-// Southern-block vertical profile
+// Southern-block wall-height reference
 // ===========================================================================
 //
-// The southern block has a sloped ceiling.
+// We are NOT modelling the roof or ceiling.
 //
-// Heights are currently approximate.
-//
-// South inside face:
-//
-//   y = 400
-//   height = 2200
-//
-// North inside face:
-//
-//   y = 5100
-//   height = 2600
+// These values are retained because they describe the approximate heights
+// of the cutaway walls in the southern block.
 //
 
 SOUTH_BLOCK_CEILING_SOUTH_Y =
@@ -405,7 +428,7 @@ HAILEY_EAST_PARTITION_LENGTH =
 
 
 // ---------------------------------------------------------------------------
-// Hailey room ceiling heights
+// Hailey wall-height references
 // ---------------------------------------------------------------------------
 
 HAILEY_CEILING_SOUTH_HEIGHT =
@@ -424,31 +447,6 @@ HAILEY_CEILING_NORTH_HEIGHT =
 // ===========================================================================
 // Stue
 // ===========================================================================
-//
-// Stue occupies the remainder of the clear southern-block interior east of
-// Hailey's partition.
-//
-// Boundaries:
-//
-//   west  = Hailey / Stue 100 mm partition
-//   east  = current 400 mm exterior wall
-//   south = current 400 mm exterior wall
-//   north = retained 400 mm former exterior wall
-//
-//
-// Clear coordinates:
-//
-//   x = 3500 -> 9500
-//   y = 400  -> 5100
-//
-// Model clear dimensions:
-//
-//   6000 x 4700 mm
-//
-// Historical plan:
-//
-//   6000 x 4750 mm
-//
 
 STUE_ROOM_X =
     HAILEY_EAST_PARTITION_X
@@ -469,10 +467,6 @@ STUE_ROOM_DEPTH =
     - WALL_EXTERIOR;
 
 
-// ---------------------------------------------------------------------------
-// Stue plan cross-checks
-// ---------------------------------------------------------------------------
-
 STUE_ROOM_PLAN_WIDTH_DIFFERENCE =
     STUE_ROOM_WIDTH
     - PLAN_LIVING_ROOM_WIDTH;
@@ -482,10 +476,6 @@ STUE_ROOM_PLAN_DEPTH_DIFFERENCE =
     STUE_ROOM_DEPTH
     - PLAN_LIVING_ROOM_DEPTH;
 
-
-// ---------------------------------------------------------------------------
-// Stue ceiling heights
-// ---------------------------------------------------------------------------
 
 STUE_CEILING_SOUTH_HEIGHT =
     south_block_ceiling_height(
@@ -498,3 +488,322 @@ STUE_CEILING_NORTH_HEIGHT =
         STUE_ROOM_Y
         + STUE_ROOM_DEPTH
     );
+
+
+// ===========================================================================
+// Alrum / kitchen
+// ===========================================================================
+//
+// Alrum is one continuous room.
+//
+// It includes:
+//
+//   - dining / general Alrum space
+//   - kitchen
+//   - circulation / Gang
+//
+// The half-wall is physical structure but does NOT make the kitchen a
+// separate room.
+//
+// The following geometry remains provisional while adjacent rooms are
+// reconstructed.
+//
+
+
+// ---------------------------------------------------------------------------
+// South boundary
+// ---------------------------------------------------------------------------
+//
+// The Alrum begins at the north face of the retained 400 mm legacy wall.
+//
+
+ALRUM_ROOM_Y =
+    LEGACY_SOUTH_WALL_Y
+    + WALL_LEGACY_EXTERIOR;
+
+
+// ---------------------------------------------------------------------------
+// Provisional north boundary
+// ---------------------------------------------------------------------------
+//
+// North interior face:
+//
+//   12600
+//
+// Northern room clear depth:
+//
+//   3200
+//
+// Plus the 100 mm partition beneath those rooms.
+//
+// This places the provisional Alrum north edge at:
+//
+//   y = 9300
+//
+
+ALRUM_ROOM_NORTH_Y =
+    HOUSE_NORTH_INTERIOR_Y
+    - PLAN_NORTH_ROW_ROOM_DEPTH
+    - WALL_PARTITION;
+
+
+ALRUM_ROOM_DEPTH =
+    ALRUM_ROOM_NORTH_Y
+    - ALRUM_ROOM_Y;
+
+
+// ---------------------------------------------------------------------------
+// West boundary
+// ---------------------------------------------------------------------------
+//
+// Western bedroom:
+//
+//   exterior inside face = 400
+//   clear width = 2700
+//
+// Partition:
+//
+//   x = 3100 -> 3200
+//
+// Alrum begins:
+//
+//   x = 3200
+//
+
+ALRUM_WEST_PARTITION_X =
+    WALL_EXTERIOR
+    + PLAN_WEST_BEDROOM_WIDTH;
+
+
+ALRUM_WEST_PARTITION_Y =
+    ALRUM_ROOM_Y;
+
+
+// For now the wall follows the provisional Alrum depth.
+//
+// Its final north end will be confirmed when the western bedroom and
+// northern rooms are modelled.
+ALRUM_WEST_PARTITION_LENGTH =
+    ALRUM_ROOM_DEPTH;
+
+
+ALRUM_ROOM_X =
+    ALRUM_WEST_PARTITION_X
+    + WALL_PARTITION;
+
+
+// ---------------------------------------------------------------------------
+// East boundary
+// ---------------------------------------------------------------------------
+//
+// The Alrum/kitchen ends against the west face of the 2013 legacy wall.
+//
+
+ALRUM_ROOM_EAST_X =
+    LEGACY_2013_EAST_WALL_X;
+
+
+ALRUM_ROOM_WIDTH =
+    ALRUM_ROOM_EAST_X
+    - ALRUM_ROOM_X;
+
+
+// ===========================================================================
+// Alrum kitchen zone
+// ===========================================================================
+//
+// PROVISIONAL.
+//
+// Approximate kitchen width:
+//
+//   600 worktop
+//   + 900 terrace-door/gang opening
+//   + 600 worktop
+//
+//   = 2100 mm
+//
+// Approximate north-south length:
+//
+//   = 2000 mm
+//
+
+ALRUM_KITCHEN_WIDTH = 2100;
+
+ALRUM_KITCHEN_DEPTH = 2000;
+
+
+ALRUM_KITCHEN_X =
+    ALRUM_ROOM_EAST_X
+    - ALRUM_KITCHEN_WIDTH;
+
+
+ALRUM_KITCHEN_Y =
+    ALRUM_ROOM_Y;
+
+
+// ===========================================================================
+// Alrum half-wall
+// ===========================================================================
+//
+// PROVISIONAL.
+//
+// Runs north from the southern Alrum boundary approximately 2600 mm.
+//
+// Height will be added later when measured.
+//
+
+ALRUM_HALF_WALL_LENGTH = 2600;
+
+ALRUM_HALF_WALL_THICKNESS =
+    WALL_PARTITION;
+
+
+ALRUM_HALF_WALL_X =
+    ALRUM_KITCHEN_X
+    - ALRUM_HALF_WALL_THICKNESS;
+
+
+ALRUM_HALF_WALL_Y =
+    ALRUM_ROOM_Y;
+
+
+// ===========================================================================
+// Alrum circulation / gang zone
+// ===========================================================================
+//
+// Kitchen occupies the first approximately 2000 mm.
+//
+// The remaining eastern strip is treated as the circulation zone.
+//
+// With the current provisional room boundary this gives approximately:
+//
+//   2100 x 1800 mm
+//   = 3.78 m²
+//
+
+ALRUM_GANG_X =
+    ALRUM_KITCHEN_X;
+
+
+ALRUM_GANG_Y =
+    ALRUM_KITCHEN_Y
+    + ALRUM_KITCHEN_DEPTH;
+
+
+ALRUM_GANG_WIDTH =
+    ALRUM_KITCHEN_WIDTH;
+
+
+ALRUM_GANG_DEPTH =
+    ALRUM_ROOM_NORTH_Y
+    - ALRUM_GANG_Y;
+
+
+ALRUM_GANG_AREA_M2 =
+    (
+        ALRUM_GANG_WIDTH
+        * ALRUM_GANG_DEPTH
+    )
+    / 1000000;
+
+
+// ===========================================================================
+// Alrum skylight marker
+// ===========================================================================
+//
+// The double skylight is NOT being modelled as roof geometry.
+//
+// It is represented only as an architectural floor-plan marker.
+//
+// Placement is currently defined from approximate distances to the
+// surrounding Alrum boundaries and half-wall.
+//
+// Approximate relationships:
+//
+//   west edge:
+//
+//       4000 mm east of the Alrum west edge
+//
+//
+//   east edge:
+//
+//       1000 mm west of the half-wall
+//
+//
+//   south edge:
+//
+//       1000 mm north of the Alrum south edge
+//
+//
+//   north edge:
+//
+//       500 mm south of the Alrum north edge
+//
+//
+// With the current provisional Alrum geometry this produces:
+//
+//   west edge:   x = 7200
+//   east edge:   x = 8560
+//
+//   south edge:  y = 6500
+//   north edge:  y = 8800
+//
+//   width:       1360 mm
+//   depth:       2300 mm
+//
+// These dimensions are therefore DERIVED from placement rather than assumed
+// to be measured skylight dimensions.
+//
+// All values remain provisional until directly measured.
+//
+
+
+// ---------------------------------------------------------------------------
+// Placement offsets
+// ---------------------------------------------------------------------------
+
+ALRUM_SKYLIGHT_WEST_OFFSET = 3000;
+
+ALRUM_SKYLIGHT_GAP_TO_HALF_WALL = 1000;
+
+ALRUM_SKYLIGHT_SOUTH_OFFSET = 1000;
+
+ALRUM_SKYLIGHT_NORTH_OFFSET = 500;
+
+
+// ---------------------------------------------------------------------------
+// Derived edges
+// ---------------------------------------------------------------------------
+
+ALRUM_SKYLIGHT_X =
+    ALRUM_ROOM_X
+    + ALRUM_SKYLIGHT_WEST_OFFSET;
+
+
+ALRUM_SKYLIGHT_EAST_X =
+    ALRUM_HALF_WALL_X
+    - ALRUM_SKYLIGHT_GAP_TO_HALF_WALL;
+
+
+ALRUM_SKYLIGHT_Y =
+    ALRUM_ROOM_Y
+    + ALRUM_SKYLIGHT_SOUTH_OFFSET;
+
+
+ALRUM_SKYLIGHT_NORTH_Y =
+    ALRUM_ROOM_NORTH_Y
+    - ALRUM_SKYLIGHT_NORTH_OFFSET;
+
+
+// ---------------------------------------------------------------------------
+// Derived size
+// ---------------------------------------------------------------------------
+
+ALRUM_SKYLIGHT_WIDTH =
+    ALRUM_SKYLIGHT_EAST_X
+    - ALRUM_SKYLIGHT_X;
+
+
+ALRUM_SKYLIGHT_DEPTH =
+    ALRUM_SKYLIGHT_NORTH_Y
+    - ALRUM_SKYLIGHT_Y;

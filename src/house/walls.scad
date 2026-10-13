@@ -6,6 +6,7 @@
  *   - current exterior wall shell
  *   - retained former exterior walls
  *   - ordinary internal partitions
+ *   - partial-height walls
  *
  * Doors and windows are NOT modelled yet.
  *
@@ -96,7 +97,7 @@ module legacy_current_extension_wall_2d() {
 
 
 // ---------------------------------------------------------------------------
-// Combined legacy construction
+// Combined legacy walls
 // ---------------------------------------------------------------------------
 
 module legacy_walls_2d() {
@@ -116,21 +117,8 @@ module legacy_walls_2d() {
 
 
 // ---------------------------------------------------------------------------
-// Hailey's bedroom / Stue
+// Hailey / Stue
 // ---------------------------------------------------------------------------
-//
-// Normal 100 mm partition.
-//
-// The clear bedroom ends at x = 3400.
-//
-// The partition therefore occupies:
-//
-//   x = 3400 -> 3500
-//
-// Stue will later begin at:
-//
-//   x = 3500
-//
 
 module hailey_east_partition_2d() {
     translate([
@@ -145,12 +133,68 @@ module hailey_east_partition_2d() {
 
 
 // ---------------------------------------------------------------------------
-// Combined ordinary partitions
+// Western bedroom / Alrum
+// ---------------------------------------------------------------------------
+//
+// Provisional north end.
+//
+// This gets confirmed when the western bedroom is modelled.
+//
+
+module alrum_west_partition_2d() {
+    translate([
+        ALRUM_WEST_PARTITION_X,
+        ALRUM_WEST_PARTITION_Y
+    ])
+        square([
+            WALL_PARTITION,
+            ALRUM_WEST_PARTITION_LENGTH
+        ]);
+}
+
+
+// ---------------------------------------------------------------------------
+// Combined full-height partitions
 // ---------------------------------------------------------------------------
 
 module partition_walls_2d() {
     union() {
         hailey_east_partition_2d();
+
+        alrum_west_partition_2d();
+    }
+}
+
+
+// ===========================================================================
+// Partial-height walls
+// ===========================================================================
+
+
+// ---------------------------------------------------------------------------
+// Alrum / kitchen half-wall
+// ---------------------------------------------------------------------------
+//
+// PLAN position only.
+//
+// Actual wall height has not yet been measured.
+//
+
+module alrum_half_wall_2d() {
+    translate([
+        ALRUM_HALF_WALL_X,
+        ALRUM_HALF_WALL_Y
+    ])
+        square([
+            ALRUM_HALF_WALL_THICKNESS,
+            ALRUM_HALF_WALL_LENGTH
+        ]);
+}
+
+
+module half_walls_2d() {
+    union() {
+        alrum_half_wall_2d();
     }
 }
 
@@ -162,24 +206,26 @@ module partition_walls_2d() {
 module house_walls_2d() {
     union() {
         exterior_walls_2d();
+
         legacy_walls_2d();
+
         partition_walls_2d();
+
+        half_walls_2d();
     }
 }
 
 
 // ===========================================================================
-// Development preview geometry
+// Development previews
 // ===========================================================================
 //
-// We intentionally keep the whole wall plan at a common preview height
-// while reconstructing the layout.
+// We are currently modelling a floor-plan/cutaway model.
 //
-// Real vertical wall profiles are being recorded in dimensions.scad and
-// room definitions as they become known.
+// The common 1000 mm preview height remains intentionally artificial while
+// the complete wall layout is established.
 //
-// Once enough of the layout is established, the diagnostic extrusion will
-// be replaced by real 3D wall geometry.
+// Real wall heights can later replace this extrusion where useful.
 //
 
 module exterior_walls_preview(
@@ -203,6 +249,14 @@ module partition_walls_preview(
 ) {
     linear_extrude(height = height)
         partition_walls_2d();
+}
+
+
+module half_walls_preview(
+    height = 1000
+) {
+    linear_extrude(height = height)
+        half_walls_2d();
 }
 
 
