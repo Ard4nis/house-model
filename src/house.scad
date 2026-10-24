@@ -45,18 +45,30 @@ include <house/windows.scad>
 include <house/base.scad>
 include <house/rooms.scad>
 include <house/features.scad>
+include <house/print.scad>
 
 
 // ===========================================================================
 // Model configuration
 // ===========================================================================
 
-MINIATURE_SCALE = 1 / 50;
+// MINIATURE_SCALE is derived in house/print.scad from the printed
+// partition thickness (PRINT_PARTITION_THICKNESS).
 
 
 // "preview"  development scene: everything below, controlled by SHOW_*.
 // "print"    printable solids only: base, walls, half-walls, stairs.
 OUTPUT_MODE = "preview";
+
+
+// Print mode only. One of:
+//
+//   "all"            every piece in place, with joints (assembly check)
+//   "south_block"
+//   "north_block"
+//   "addition_2013"
+//   "extension"
+PRINT_PIECE = "all";
 
 
 // ===========================================================================
@@ -694,15 +706,16 @@ echo(
 );
 
 echo(
-    "Output mode / miniature scale:",
+    "Output mode / print piece / miniature scale (1:n):",
     [
         OUTPUT_MODE,
-        MINIATURE_SCALE
+        PRINT_PIECE,
+        1 / MINIATURE_SCALE
     ]
 );
 
 echo(
-    "Printed footprint size mm [x, y, z]:",
+    "Printed whole-house size mm [x, y, z]:",
     [
         HOUSE_MAX_WIDTH * MINIATURE_SCALE,
         HOUSE_MAX_DEPTH * MINIATURE_SCALE,
@@ -811,34 +824,12 @@ module house() {
 
 
 // ===========================================================================
-// Printable model
-// ===========================================================================
-//
-// Solid architecture only. No room slabs, plan markers or helpers.
-//
-
-module house_print() {
-    printable_base_3d();
-
-    exterior_walls_preview();
-
-    legacy_walls_preview();
-
-    partition_walls_preview();
-
-    half_walls_preview();
-
-    stairs_3d();
-}
-
-
-// ===========================================================================
 // Scene
 // ===========================================================================
 
 module scene() {
     if (OUTPUT_MODE == "print") {
-        house_print();
+        print_output_3d(PRINT_PIECE);
     } else {
         house();
 
