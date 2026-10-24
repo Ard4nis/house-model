@@ -1066,3 +1066,107 @@ MASTER_BEDROOM_EAST_PARTITION_Y =
 MASTER_BEDROOM_EAST_PARTITION_LENGTH =
     MASTER_BEDROOM_NORTH_Y
     - MASTER_BEDROOM_SOUTH_Y;
+
+
+// ===========================================================================
+// Viktualierum / krea
+// ===========================================================================
+//
+// One room used as both viktualierum (pantry) and krea (craft room).
+//
+// Shown on the historical drawing as PLAN_NORTH_BEDROOM_2.
+//
+// Current model:
+//
+//   west edge:    x = 6890    (master bedroom east partition)
+//   east edge:    x = 9360
+//
+//   south edge:   y = 9400    (northern-row south partition)
+//   north edge:   y = 12600   (north exterior wall inside face)
+//
+//   clear size:   2470 x 3200 mm
+//
+
+
+// ---------------------------------------------------------------------------
+// Clear room
+// ---------------------------------------------------------------------------
+
+KREA_ROOM_X =
+    MASTER_BEDROOM_EAST_PARTITION_X
+    + WALL_PARTITION;
+
+
+KREA_ROOM_Y =
+    MASTER_BEDROOM_SOUTH_Y;
+
+
+// PLAN.
+KREA_ROOM_WIDTH =
+    PLAN_NORTH_BEDROOM_2_WIDTH;
+
+
+// PROVISIONAL.
+//
+// Follows the provisional northern-row depth.
+KREA_ROOM_DEPTH =
+    HOUSE_NORTH_INTERIOR_Y
+    - KREA_ROOM_Y;
+
+
+KREA_ROOM_AREA_M2 =
+    (
+        KREA_ROOM_WIDTH
+        * KREA_ROOM_DEPTH
+    )
+    / 1000000;
+
+
+// ---------------------------------------------------------------------------
+// Viktualierum / Alrum partition
+// ---------------------------------------------------------------------------
+//
+// Continues the northern-row south wall east from the master bedroom.
+//
+// Solid for now. Openings will be cut later.
+//
+//   x = 6890 -> 9460   (includes the corner under the east partition)
+//   y = 9300 -> 9400
+//
+
+KREA_SOUTH_PARTITION_X =
+    KREA_ROOM_X;
+
+
+KREA_SOUTH_PARTITION_Y =
+    ALRUM_ROOM_NORTH_Y;
+
+
+KREA_SOUTH_PARTITION_LENGTH =
+    KREA_ROOM_WIDTH
+    + WALL_PARTITION;
+
+
+// ---------------------------------------------------------------------------
+// Viktualierum / Bryggers partition
+// ---------------------------------------------------------------------------
+//
+//   x = 9360 -> 9460
+//   y = 9400 -> 12600
+//
+// Its position is part of the northern-row chain used to derive
+// LEGACY_2013_EAST_WALL_X, leaving 2300 mm (PLAN_UTILITY_WIDTH) for the
+// Bryggers.
+//
+
+KREA_EAST_PARTITION_X =
+    KREA_ROOM_X
+    + KREA_ROOM_WIDTH;
+
+
+KREA_EAST_PARTITION_Y =
+    KREA_ROOM_Y;
+
+
+KREA_EAST_PARTITION_LENGTH =
+    KREA_ROOM_DEPTH;

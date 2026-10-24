@@ -198,6 +198,34 @@ module master_bedroom_east_partition_2d() {
 
 
 // ---------------------------------------------------------------------------
+// Viktualierum / krea
+// ---------------------------------------------------------------------------
+
+module krea_south_partition_2d() {
+    translate([
+        KREA_SOUTH_PARTITION_X,
+        KREA_SOUTH_PARTITION_Y
+    ])
+        square([
+            KREA_SOUTH_PARTITION_LENGTH,
+            WALL_PARTITION
+        ]);
+}
+
+
+module krea_east_partition_2d() {
+    translate([
+        KREA_EAST_PARTITION_X,
+        KREA_EAST_PARTITION_Y
+    ])
+        square([
+            WALL_PARTITION,
+            KREA_EAST_PARTITION_LENGTH
+        ]);
+}
+
+
+// ---------------------------------------------------------------------------
 // Combined full-height partitions
 // ---------------------------------------------------------------------------
 
@@ -214,6 +242,10 @@ module partition_walls_2d() {
         master_bedroom_south_partition_2d();
 
         master_bedroom_east_partition_2d();
+
+        krea_south_partition_2d();
+
+        krea_east_partition_2d();
     }
 }
 

@@ -368,6 +368,42 @@ echo(
 
 
 // ---------------------------------------------------------------------------
+// Viktualierum / krea
+// ---------------------------------------------------------------------------
+
+echo(
+    "Viktualierum/krea origin:",
+    [
+        KREA_ROOM_X,
+        KREA_ROOM_Y
+    ]
+);
+
+echo(
+    "Viktualierum/krea clear size:",
+    [
+        KREA_ROOM_WIDTH,
+        KREA_ROOM_DEPTH
+    ]
+);
+
+echo(
+    "Viktualierum/krea approximate area m2:",
+    KREA_ROOM_AREA_M2
+);
+
+echo(
+    "Viktualierum/krea east partition:",
+    [
+        KREA_EAST_PARTITION_X,
+        KREA_EAST_PARTITION_Y,
+        WALL_PARTITION,
+        KREA_EAST_PARTITION_LENGTH
+    ]
+);
+
+
+// ---------------------------------------------------------------------------
 // Alrum
 // ---------------------------------------------------------------------------
 

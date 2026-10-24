@@ -18,6 +18,7 @@ include <rooms/hailey_bedroom.scad>
 include <rooms/nova_bedroom.scad>
 include <rooms/bathroom.scad>
 include <rooms/master_bedroom.scad>
+include <rooms/krea.scad>
 include <rooms/stue.scad>
 include <rooms/alrum.scad>
 
@@ -35,6 +36,8 @@ module rooms_2d() {
         bathroom_2d();
 
         master_bedroom_2d();
+
+        krea_2d();
 
         stue_2d();
 
@@ -67,6 +70,11 @@ module rooms_preview(
     );
 
     master_bedroom_preview(
+        height = height,
+        z = z
+    );
+
+    krea_preview(
         height = height,
         z = z
     );
