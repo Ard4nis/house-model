@@ -14,8 +14,8 @@
  *   x, y   south-west corner of the opening in plan
  *   z      bottom of the opening (the floor level it opens from)
  *
- * Widths and heights are ROUGH OPENING sizes in the wall, not door-leaf
- * sizes.
+ * Widths and heights are the door FRAME size, i.e. the hole in the wall.
+ * Door leaves (typically ~60 mm lower than the frame) are not modelled.
  *
  * Position status used below:
  *
@@ -33,10 +33,11 @@
 // Defaults
 // ===========================================================================
 
-// PROVISIONAL. Typical Danish 9M interior-door rough opening.
+// PROVISIONAL. Typical Danish 9M interior-door frame width.
 DOOR_DEFAULT_WIDTH = 900;
 
-// PROVISIONAL. Typical 21M rough opening height.
+// MEASURED (approx.). Standard frame height for most doors in the house;
+// the leaves are ~2040.
 DOOR_DEFAULT_HEIGHT = 2100;
 
 
@@ -377,6 +378,10 @@ DOOR_OFFICE_TECH_ROOM =
 // MEASURED (approx.). Gap from the current-extension legacy wall.
 DOOR_OFFICE_HOBBY_ROOM_OFFSET = 50;
 
+// MEASURED. Frame height; lower than standard because the opening was
+// built too low. The leaf / clear passage is ~1900.
+DOOR_OFFICE_HOBBY_ROOM_HEIGHT = 1960;
+
 // Opens from the raised office floor; one ~60 mm step down to the hobby
 // room.
 DOOR_OFFICE_HOBBY_ROOM =
@@ -386,7 +391,8 @@ DOOR_OFFICE_HOBBY_ROOM =
             + DOOR_OFFICE_HOBBY_ROOM_OFFSET,
         wall_y = EXTENSION_SOUTH_ROOMS_NORTH_PARTITION_Y,
         thickness = WALL_PARTITION,
-        z = EXTENSION_SOUTH_ROOMS_FLOOR_Z
+        z = EXTENSION_SOUTH_ROOMS_FLOOR_Z,
+        height = DOOR_OFFICE_HOBBY_ROOM_HEIGHT
     );
 
 

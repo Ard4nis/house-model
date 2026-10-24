@@ -7,6 +7,7 @@
 
 
 include <features/skylights.scad>
+include <features/stairs.scad>
 
 
 // ===========================================================================

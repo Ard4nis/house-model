@@ -2102,12 +2102,11 @@ HOBBY_ROOM_AREA_M2 =
 // Height regions (plan rectangles, each with a floor and ceiling Z):
 //
 //   default       whole house                        Z 0    -> 2200
-//   south block   x 0 -> 9900,  y 0 -> 5300          Z 0    -> 2200, with the
-//                 legacy south wall's south half at 2500
+//   south block   x 0 -> 9900,  y 0 -> 5300          Z 0    -> 2200..2500
+//                 (ceiling slopes south -> north; interior and exterior
+//                 walls both follow it)
 //   ext. south    x 16940 -> 21140, y 0    -> 7550   Z -240 -> 2060
 //   ext. hobby    x 16940 -> 21140, y 7550 -> 13000  Z -300 -> 2200
-//
-// Interior walls do NOT follow the south-block ceiling slope.
 //
 // EXTERIOR walls use the same regions for their bottoms (floor levels), but
 // all share one top level, EXTERIOR_WALL_TOP_Z, except in the south block
@@ -2207,3 +2206,105 @@ WALL_EXTRUDE_TOP_Z =
         HOBBY_ROOM_WALL_TOP_Z,
         EXTENSION_SOUTH_ROOMS_WALL_TOP_Z
     );
+
+
+// ===========================================================================
+// Hobby room stair to the Hems
+// ===========================================================================
+//
+// Straight stair against the hobby room east wall, climbing SOUTH from the
+// terrace-door end up to the ceiling. The Hems itself is a separate model;
+// this stair shows the connection.
+//
+// The space beneath the flight is used as storage.
+//
+//   x = 19740 -> 20740            (1000 wide, against the east wall)
+//   y = 11400 (foot) -> 8600 (top)
+//
+//   foot:  ~1200 mm south of the north wall / terrace door
+//   top:   meets the ceiling ~1000 mm north of the hobby room south wall
+//
+//   rise:  hobby room floor (-300) -> hobby room ceiling (2200) = 2500
+//
+
+// MEASURED (approx.).
+HOBBY_STAIR_WIDTH = 1000;
+
+// MEASURED (approx.). Clear floor between the north wall and the foot.
+HOBBY_STAIR_FOOT_NORTH_GAP = 1200;
+
+// MEASURED (approx.). Gap from the top of the stair to the south wall.
+HOBBY_STAIR_TOP_SOUTH_GAP = 1000;
+
+// PROVISIONAL. "Standard" step height; the exact rise is derived below.
+HOBBY_STAIR_TARGET_RISE = 180;
+
+// PROVISIONAL. Structural thickness of the flight, measured square to the
+// pitch below the inner step corners. The space under the flight is open
+// storage, so the stair is NOT solid down to the floor.
+HOBBY_STAIR_WAIST = 150;
+
+
+HOBBY_STAIR_X =
+    EXTENSION_EAST_X
+    - HOBBY_STAIR_WIDTH;
+
+
+HOBBY_STAIR_FOOT_Y =
+    HOBBY_ROOM_Y
+    + HOBBY_ROOM_DEPTH
+    - HOBBY_STAIR_FOOT_NORTH_GAP;
+
+
+HOBBY_STAIR_TOP_Y =
+    HOBBY_ROOM_Y
+    + HOBBY_STAIR_TOP_SOUTH_GAP;
+
+
+HOBBY_STAIR_RUN =
+    HOBBY_STAIR_FOOT_Y
+    - HOBBY_STAIR_TOP_Y;
+
+
+HOBBY_STAIR_BOTTOM_Z =
+    EAST_EXTENSION_FLOOR_Z;
+
+
+HOBBY_STAIR_TOP_Z =
+    HOBBY_ROOM_WALL_TOP_Z;
+
+
+HOBBY_STAIR_TOTAL_RISE =
+    HOBBY_STAIR_TOP_Z
+    - HOBBY_STAIR_BOTTOM_Z;
+
+
+// DERIVED. Number of steps; the last step is level with the ceiling.
+HOBBY_STAIR_STEPS =
+    round(
+        HOBBY_STAIR_TOTAL_RISE
+        / HOBBY_STAIR_TARGET_RISE
+    );
+
+
+HOBBY_STAIR_RISE =
+    HOBBY_STAIR_TOTAL_RISE
+    / HOBBY_STAIR_STEPS;
+
+
+HOBBY_STAIR_GOING =
+    HOBBY_STAIR_RUN
+    / HOBBY_STAIR_STEPS;
+
+
+HOBBY_STAIR_ANGLE =
+    atan(
+        HOBBY_STAIR_TOTAL_RISE
+        / HOBBY_STAIR_RUN
+    );
+
+
+// Vertical depth of the waist below the inner step corners.
+HOBBY_STAIR_WAIST_VERTICAL =
+    HOBBY_STAIR_WAIST
+    / cos(HOBBY_STAIR_ANGLE);

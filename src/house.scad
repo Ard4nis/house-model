@@ -73,6 +73,8 @@ SHOW_ROOMS = true;
 
 SHOW_SKYLIGHT_MARKERS = true;
 
+SHOW_STAIRS = true;
+
 
 // ---------------------------------------------------------------------------
 // Development-only preview dimensions
@@ -672,6 +674,31 @@ echo(
 
 
 // ---------------------------------------------------------------------------
+// Hobby room stair
+// ---------------------------------------------------------------------------
+
+echo(
+    "Hobby stair plan [x, top y, width, run]:",
+    [
+        HOBBY_STAIR_X,
+        HOBBY_STAIR_TOP_Y,
+        HOBBY_STAIR_WIDTH,
+        HOBBY_STAIR_RUN
+    ]
+);
+
+echo(
+    "Hobby stair steps / rise / going / angle:",
+    [
+        HOBBY_STAIR_STEPS,
+        HOBBY_STAIR_RISE,
+        HOBBY_STAIR_GOING,
+        HOBBY_STAIR_ANGLE
+    ]
+);
+
+
+// ---------------------------------------------------------------------------
 // Door schedule
 // ---------------------------------------------------------------------------
 //
@@ -731,6 +758,11 @@ module house() {
             height = PREVIEW_FEATURE_HEIGHT,
             z = PREVIEW_FEATURE_Z
         );
+    }
+
+
+    if (SHOW_STAIRS) {
+        stairs_3d();
     }
 }
 

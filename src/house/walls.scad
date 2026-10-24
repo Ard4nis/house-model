@@ -505,12 +505,12 @@ module extension_hobby_height_region_2d() {
 }
 
 
-// South block, interior walls: MAIN_WALL_HEIGHT, except the south half of
-// the legacy south wall, which shows the full slope-top height
-// (SOUTH_BLOCK_CEILING_NORTH_HEIGHT) on the Hailey / Stue side.
+// South block: ceiling slopes from SOUTH_BLOCK_CEILING_SOUTH_HEIGHT at the
+// south wall's inside face to SOUTH_BLOCK_CEILING_NORTH_HEIGHT at the
+// legacy south wall, and is flat beyond those points.
 //
-// Interior walls do NOT follow the ceiling slope; only the exterior walls
-// do (see exterior_wall_top_cap_3d).
+// Interior walls here (e.g. Hailey / Stue partition) follow the slope; the
+// legacy south wall's south half sits at the slope top.
 module south_block_height_envelope_3d() {
     // Profile drawn as (y, z), then extruded east along X.
     rotate([90, 0, 90])
@@ -519,9 +519,9 @@ module south_block_height_envelope_3d() {
                 [0,                               MAIN_FLOOR_Z],
                 [WALL_HEIGHT_SOUTH_BLOCK_NORTH_Y, MAIN_FLOOR_Z],
                 [WALL_HEIGHT_SOUTH_BLOCK_NORTH_Y, MAIN_FLOOR_Z + SOUTH_BLOCK_CEILING_NORTH_HEIGHT],
-                [LEGACY_SOUTH_WALL_Y,             MAIN_FLOOR_Z + SOUTH_BLOCK_CEILING_NORTH_HEIGHT],
-                [LEGACY_SOUTH_WALL_Y,             MAIN_FLOOR_Z + MAIN_WALL_HEIGHT],
-                [0,                               MAIN_FLOOR_Z + MAIN_WALL_HEIGHT]
+                [SOUTH_BLOCK_CEILING_NORTH_Y,     MAIN_FLOOR_Z + SOUTH_BLOCK_CEILING_NORTH_HEIGHT],
+                [SOUTH_BLOCK_CEILING_SOUTH_Y,     MAIN_FLOOR_Z + SOUTH_BLOCK_CEILING_SOUTH_HEIGHT],
+                [0,                               MAIN_FLOOR_Z + SOUTH_BLOCK_CEILING_SOUTH_HEIGHT]
             ]);
 }
 
