@@ -2308,3 +2308,35 @@ HOBBY_STAIR_ANGLE =
 HOBBY_STAIR_WAIST_VERTICAL =
     HOBBY_STAIR_WAIST
     / cos(HOBBY_STAIR_ANGLE);
+
+
+// ===========================================================================
+// Printable base
+// ===========================================================================
+//
+// One continuous slab under the whole house footprint. It is NOT built
+// from the room clear areas.
+//
+// Its top is each region's finished floor (the same regions the walls
+// use), so walls, doors, stairs and furniture keep their real Z:
+//
+//   main house / 2013 addition    top Z 0
+//   office / tech room            top Z -240
+//   hobby room                    top Z -300
+//
+// The base extends DOWN from the floors to one flat underside.
+//
+
+// PROVISIONAL. Base thickness under the LOWEST floor, in real mm.
+//
+// 200 mm real = 4 mm at 1:50, 2 mm at 1:100.
+BASE_MIN_THICKNESS = 200;
+
+
+BASE_BOTTOM_Z =
+    min(
+        MAIN_FLOOR_Z,
+        EXTENSION_SOUTH_ROOMS_FLOOR_Z,
+        EAST_EXTENSION_FLOOR_Z
+    )
+    - BASE_MIN_THICKNESS;

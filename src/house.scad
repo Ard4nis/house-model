@@ -42,6 +42,7 @@ include <house/footprint.scad>
 include <house/walls.scad>
 include <house/doors.scad>
 include <house/windows.scad>
+include <house/base.scad>
 include <house/rooms.scad>
 include <house/features.scad>
 
@@ -53,6 +54,11 @@ include <house/features.scad>
 MINIATURE_SCALE = 1 / 50;
 
 
+// "preview"  development scene: everything below, controlled by SHOW_*.
+// "print"    printable solids only: base, walls, half-walls, stairs.
+OUTPUT_MODE = "preview";
+
+
 // ===========================================================================
 // Preview configuration
 // ===========================================================================
@@ -60,6 +66,8 @@ MINIATURE_SCALE = 1 / 50;
 SHOW_COORDINATE_AXES = true;
 
 SHOW_FOOTPRINT = false;
+
+SHOW_BASE = true;
 
 SHOW_EXTERIOR_WALLS = true;
 
@@ -674,6 +682,36 @@ echo(
 
 
 // ---------------------------------------------------------------------------
+// Printable base
+// ---------------------------------------------------------------------------
+
+echo(
+    "Base underside Z / min thickness:",
+    [
+        BASE_BOTTOM_Z,
+        BASE_MIN_THICKNESS
+    ]
+);
+
+echo(
+    "Output mode / miniature scale:",
+    [
+        OUTPUT_MODE,
+        MINIATURE_SCALE
+    ]
+);
+
+echo(
+    "Printed footprint size mm [x, y, z]:",
+    [
+        HOUSE_MAX_WIDTH * MINIATURE_SCALE,
+        HOUSE_MAX_DEPTH * MINIATURE_SCALE,
+        (EXTERIOR_WALL_TOP_Z - BASE_BOTTOM_Z) * MINIATURE_SCALE
+    ]
+);
+
+
+// ---------------------------------------------------------------------------
 // Hobby room stair
 // ---------------------------------------------------------------------------
 
@@ -725,6 +763,11 @@ module house() {
     }
 
 
+    if (SHOW_BASE) {
+        printable_base_3d();
+    }
+
+
     if (SHOW_ROOMS) {
         rooms_preview(
             height = PREVIEW_ROOM_HEIGHT,
@@ -768,14 +811,40 @@ module house() {
 
 
 // ===========================================================================
-// Development scene
+// Printable model
+// ===========================================================================
+//
+// Solid architecture only. No room slabs, plan markers or helpers.
+//
+
+module house_print() {
+    printable_base_3d();
+
+    exterior_walls_preview();
+
+    legacy_walls_preview();
+
+    partition_walls_preview();
+
+    half_walls_preview();
+
+    stairs_3d();
+}
+
+
+// ===========================================================================
+// Scene
 // ===========================================================================
 
 module scene() {
-    house();
+    if (OUTPUT_MODE == "print") {
+        house_print();
+    } else {
+        house();
 
-    if (SHOW_COORDINATE_AXES) {
-        coordinate_axes();
+        if (SHOW_COORDINATE_AXES) {
+            coordinate_axes();
+        }
     }
 }
 
@@ -788,10 +857,20 @@ module scene() {
 //
 // Miniature scaling occurs only here.
 //
+// In print mode the model is also lifted so the base underside sits on the
+// print bed (Z = 0). House coordinates themselves are unchanged.
+//
+
+OUTPUT_LIFT_Z =
+    OUTPUT_MODE == "print"
+        ? -BASE_BOTTOM_Z
+        : 0;
+
 
 scale([
     MINIATURE_SCALE,
     MINIATURE_SCALE,
     MINIATURE_SCALE
 ])
-    scene();
+    translate([0, 0, OUTPUT_LIFT_Z])
+        scene();
