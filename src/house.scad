@@ -81,10 +81,6 @@ SHOW_SKYLIGHT_MARKERS = true;
 PREVIEW_WALL_HEIGHT = 1000;
 
 
-// Actual half-wall height has not yet been measured.
-PREVIEW_HALF_WALL_HEIGHT = 1000;
-
-
 PREVIEW_ROOM_HEIGHT = 25;
 
 PREVIEW_ROOM_Z = 25;
@@ -301,6 +297,42 @@ echo(
 
 
 // ---------------------------------------------------------------------------
+// Bathroom
+// ---------------------------------------------------------------------------
+
+echo(
+    "Bathroom origin:",
+    [
+        BATHROOM_X,
+        BATHROOM_Y
+    ]
+);
+
+echo(
+    "Bathroom clear size:",
+    [
+        BATHROOM_WIDTH,
+        BATHROOM_DEPTH
+    ]
+);
+
+echo(
+    "Bathroom plan depth difference:",
+    BATHROOM_PLAN_DEPTH_DIFFERENCE
+);
+
+echo(
+    "Bathroom east partition:",
+    [
+        BATHROOM_EAST_PARTITION_X,
+        BATHROOM_EAST_PARTITION_Y,
+        WALL_PARTITION,
+        BATHROOM_EAST_PARTITION_LENGTH
+    ]
+);
+
+
+// ---------------------------------------------------------------------------
 // Alrum
 // ---------------------------------------------------------------------------
 
@@ -333,6 +365,11 @@ echo(
         ALRUM_HALF_WALL_THICKNESS,
         ALRUM_HALF_WALL_LENGTH
     ]
+);
+
+echo(
+    "Alrum half-wall height — measured:",
+    ALRUM_HALF_WALL_HEIGHT
 );
 
 echo(
@@ -412,9 +449,7 @@ module house() {
 
 
     if (SHOW_HALF_WALLS) {
-        half_walls_preview(
-            height = PREVIEW_HALF_WALL_HEIGHT
-        );
+        half_walls_preview();
     }
 
 

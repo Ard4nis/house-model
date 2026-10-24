@@ -649,6 +649,96 @@ NOVA_NORTH_PARTITION_LENGTH =
 
 
 // ===========================================================================
+// Bathroom
+// ===========================================================================
+//
+// North-west corner bathroom, directly north of Nova's bedroom.
+//
+// Historical drawing:
+//
+//   approximately 2000 x 2830 mm
+//
+// Current model:
+//
+//   west edge:    x = 400     (north-west exterior wall inside face)
+//   east edge:    x = 2400
+//
+//   south edge:   y = 9700    (north face of Nova's north partition)
+//   north edge:   y = 12600   (north exterior wall inside face)
+//
+//   clear size:   2000 x 2900 mm
+//
+// Historical-plan depth difference:
+//
+//   2900 - 2830 = +70 mm
+//
+// The +70 mm is consistent with a rough real-world measurement, so the
+// derived depth is accepted.
+//
+
+
+// ---------------------------------------------------------------------------
+// Clear room
+// ---------------------------------------------------------------------------
+
+BATHROOM_X =
+    WALL_EXTERIOR;
+
+
+BATHROOM_Y =
+    NOVA_NORTH_PARTITION_Y
+    + WALL_PARTITION;
+
+
+// PLAN.
+BATHROOM_WIDTH =
+    PLAN_NORTH_BATH_WIDTH;
+
+
+BATHROOM_NORTH_Y =
+    HOUSE_NORTH_INTERIOR_Y;
+
+
+// DERIVED, confirmed by rough measurement.
+BATHROOM_DEPTH =
+    BATHROOM_NORTH_Y
+    - BATHROOM_Y;
+
+
+BATHROOM_PLAN_DEPTH_DIFFERENCE =
+    BATHROOM_DEPTH
+    - PLAN_NW_BATH_DEPTH;
+
+
+// ---------------------------------------------------------------------------
+// Bathroom east partition
+// ---------------------------------------------------------------------------
+//
+// Separates the bathroom from the Entré.
+//
+// Runs from Nova's north partition to the north exterior wall:
+//
+//   x = 2400 -> 2500
+//   y = 9700 -> 12600
+//
+// This is the first partition in the northern-row chain used to derive
+// LEGACY_2013_EAST_WALL_X.
+//
+
+BATHROOM_EAST_PARTITION_X =
+    BATHROOM_X
+    + BATHROOM_WIDTH;
+
+
+BATHROOM_EAST_PARTITION_Y =
+    BATHROOM_Y;
+
+
+BATHROOM_EAST_PARTITION_LENGTH =
+    BATHROOM_DEPTH;
+
+
+// ===========================================================================
 // Alrum / kitchen
 // ===========================================================================
 //
@@ -721,10 +811,14 @@ ALRUM_KITCHEN_Y =
 //
 // Runs north from the southern Alrum boundary.
 //
-// Actual height has NOT been measured yet.
-//
 
 ALRUM_HALF_WALL_LENGTH = 2600;
+
+
+// MEASURED.
+//
+// Height above main finished floor.
+ALRUM_HALF_WALL_HEIGHT = 1200;
 
 ALRUM_HALF_WALL_THICKNESS =
     WALL_PARTITION;

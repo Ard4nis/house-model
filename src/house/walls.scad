@@ -154,6 +154,22 @@ module nova_north_partition_2d() {
 
 
 // ---------------------------------------------------------------------------
+// Bathroom / Entré
+// ---------------------------------------------------------------------------
+
+module bathroom_east_partition_2d() {
+    translate([
+        BATHROOM_EAST_PARTITION_X,
+        BATHROOM_EAST_PARTITION_Y
+    ])
+        square([
+            WALL_PARTITION,
+            BATHROOM_EAST_PARTITION_LENGTH
+        ]);
+}
+
+
+// ---------------------------------------------------------------------------
 // Combined full-height partitions
 // ---------------------------------------------------------------------------
 
@@ -164,6 +180,8 @@ module partition_walls_2d() {
         nova_east_partition_2d();
 
         nova_north_partition_2d();
+
+        bathroom_east_partition_2d();
     }
 }
 
@@ -189,10 +207,23 @@ module alrum_half_wall_2d() {
 }
 
 
+// Extruded to its MEASURED height rather than the diagnostic preview height.
+module alrum_half_wall_3d() {
+    translate([0, 0, MAIN_FLOOR_Z])
+        linear_extrude(height = ALRUM_HALF_WALL_HEIGHT)
+            alrum_half_wall_2d();
+}
+
+
 module half_walls_2d() {
     union() {
         alrum_half_wall_2d();
     }
+}
+
+
+module half_walls_3d() {
+    alrum_half_wall_3d();
 }
 
 
@@ -245,11 +276,9 @@ module partition_walls_preview(
 }
 
 
-module half_walls_preview(
-    height = 1000
-) {
-    linear_extrude(height = height)
-        half_walls_2d();
+// Half-walls use their own real heights.
+module half_walls_preview() {
+    half_walls_3d();
 }
 
 
