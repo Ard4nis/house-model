@@ -226,6 +226,22 @@ module krea_east_partition_2d() {
 
 
 // ---------------------------------------------------------------------------
+// Bryggers / Alrum
+// ---------------------------------------------------------------------------
+
+module bryggers_south_partition_2d() {
+    translate([
+        BRYGGERS_SOUTH_PARTITION_X,
+        BRYGGERS_SOUTH_PARTITION_Y
+    ])
+        square([
+            BRYGGERS_SOUTH_PARTITION_LENGTH,
+            WALL_PARTITION
+        ]);
+}
+
+
+// ---------------------------------------------------------------------------
 // Combined full-height partitions
 // ---------------------------------------------------------------------------
 
@@ -246,6 +262,8 @@ module partition_walls_2d() {
         krea_south_partition_2d();
 
         krea_east_partition_2d();
+
+        bryggers_south_partition_2d();
     }
 }
 

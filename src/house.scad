@@ -404,6 +404,42 @@ echo(
 
 
 // ---------------------------------------------------------------------------
+// Bryggers
+// ---------------------------------------------------------------------------
+
+echo(
+    "Bryggers origin:",
+    [
+        BRYGGERS_ROOM_X,
+        BRYGGERS_ROOM_Y
+    ]
+);
+
+echo(
+    "Bryggers clear size:",
+    [
+        BRYGGERS_ROOM_WIDTH,
+        BRYGGERS_ROOM_DEPTH
+    ]
+);
+
+echo(
+    "Bryggers approximate area m2:",
+    BRYGGERS_ROOM_AREA_M2
+);
+
+echo(
+    "Bryggers south partition:",
+    [
+        BRYGGERS_SOUTH_PARTITION_X,
+        BRYGGERS_SOUTH_PARTITION_Y,
+        BRYGGERS_SOUTH_PARTITION_LENGTH,
+        WALL_PARTITION
+    ]
+);
+
+
+// ---------------------------------------------------------------------------
 // Alrum
 // ---------------------------------------------------------------------------
 
@@ -426,6 +462,16 @@ echo(
 echo(
     "Alrum provisional north boundary:",
     ALRUM_ROOM_NORTH_Y
+);
+
+echo(
+    "Alrum north bump:",
+    [
+        ALRUM_NORTH_BUMP_X,
+        ALRUM_NORTH_BUMP_Y,
+        ALRUM_NORTH_BUMP_WIDTH,
+        ALRUM_NORTH_BUMP_DEPTH
+    ]
 );
 
 echo(

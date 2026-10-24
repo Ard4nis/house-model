@@ -19,6 +19,7 @@ include <rooms/nova_bedroom.scad>
 include <rooms/bathroom.scad>
 include <rooms/master_bedroom.scad>
 include <rooms/krea.scad>
+include <rooms/bryggers.scad>
 include <rooms/stue.scad>
 include <rooms/alrum.scad>
 
@@ -38,6 +39,8 @@ module rooms_2d() {
         master_bedroom_2d();
 
         krea_2d();
+
+        bryggers_2d();
 
         stue_2d();
 
@@ -75,6 +78,11 @@ module rooms_preview(
     );
 
     krea_preview(
+        height = height,
+        z = z
+    );
+
+    bryggers_preview(
         height = height,
         z = z
     );

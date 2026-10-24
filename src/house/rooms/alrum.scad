@@ -25,14 +25,27 @@
 module alrum_2d() {
     difference() {
 
-        translate([
-            ALRUM_ROOM_X,
-            ALRUM_ROOM_Y
-        ])
-            square([
-                ALRUM_ROOM_WIDTH,
-                ALRUM_ROOM_DEPTH
-            ]);
+        union() {
+            translate([
+                ALRUM_ROOM_X,
+                ALRUM_ROOM_Y
+            ])
+                square([
+                    ALRUM_ROOM_WIDTH,
+                    ALRUM_ROOM_DEPTH
+                ]);
+
+
+            // Extension north beneath the Bryggers.
+            translate([
+                ALRUM_NORTH_BUMP_X,
+                ALRUM_NORTH_BUMP_Y
+            ])
+                square([
+                    ALRUM_NORTH_BUMP_WIDTH,
+                    ALRUM_NORTH_BUMP_DEPTH
+                ]);
+        }
 
 
         // The half-wall occupies physical floor-plan space.

@@ -496,6 +496,9 @@ ALRUM_ROOM_Y =
 
 // PROVISIONAL.
 //
+// Main northern edge of Alrum. Alrum also extends farther north beneath
+// the Bryggers; see "Alrum north bump" at the end of this file.
+//
 // Northern rooms currently provide this working northern edge:
 //
 //   12600 north interior face
@@ -1128,7 +1131,10 @@ KREA_ROOM_AREA_M2 =
 //
 // Continues the northern-row south wall east from the master bedroom.
 //
-// Solid for now. Openings will be cut later.
+// Confirmed as a full-height wall with ONE door to Alrum.
+//
+// Solid for now. The door will be cut once its position and width are
+// known.
 //
 //   x = 6890 -> 9460   (includes the corner under the east partition)
 //   y = 9300 -> 9400
@@ -1170,3 +1176,126 @@ KREA_EAST_PARTITION_Y =
 
 KREA_EAST_PARTITION_LENGTH =
     KREA_ROOM_DEPTH;
+
+
+// ===========================================================================
+// Bryggers
+// ===========================================================================
+//
+// Utility room in the north-east corner of the original house.
+//
+// The Bryggers is shallower than the other northern-row rooms. Alrum
+// continues north beneath it (see "Alrum north bump" below).
+//
+// Current model:
+//
+//   west edge:    x = 9460    (viktualierum / krea east partition)
+//   east edge:    x = 11760   (2013 legacy wall west face)
+//
+//   south edge:   y = 9960
+//   north edge:   y = 12600   (north exterior wall inside face)
+//
+//   clear size:   2300 x 2640 mm
+//
+
+
+// ---------------------------------------------------------------------------
+// Clear room
+// ---------------------------------------------------------------------------
+
+BRYGGERS_ROOM_X =
+    KREA_EAST_PARTITION_X
+    + WALL_PARTITION;
+
+
+BRYGGERS_ROOM_EAST_X =
+    LEGACY_2013_EAST_WALL_X;
+
+
+// DERIVED. Equal to PLAN_UTILITY_WIDTH by construction of the
+// northern-row chain.
+BRYGGERS_ROOM_WIDTH =
+    BRYGGERS_ROOM_EAST_X
+    - BRYGGERS_ROOM_X;
+
+
+BRYGGERS_ROOM_NORTH_Y =
+    HOUSE_NORTH_INTERIOR_Y;
+
+
+// PLAN.
+BRYGGERS_ROOM_DEPTH =
+    PLAN_UTILITY_DEPTH;
+
+
+BRYGGERS_ROOM_Y =
+    BRYGGERS_ROOM_NORTH_Y
+    - BRYGGERS_ROOM_DEPTH;
+
+
+BRYGGERS_ROOM_AREA_M2 =
+    (
+        BRYGGERS_ROOM_WIDTH
+        * BRYGGERS_ROOM_DEPTH
+    )
+    / 1000000;
+
+
+// ---------------------------------------------------------------------------
+// Bryggers / Alrum partition
+// ---------------------------------------------------------------------------
+//
+//   x = 9460  -> 11760
+//   y = 9860  -> 9960
+//
+// Solid for now. Openings will be cut later.
+//
+
+BRYGGERS_SOUTH_PARTITION_X =
+    BRYGGERS_ROOM_X;
+
+
+BRYGGERS_SOUTH_PARTITION_Y =
+    BRYGGERS_ROOM_Y
+    - WALL_PARTITION;
+
+
+BRYGGERS_SOUTH_PARTITION_LENGTH =
+    BRYGGERS_ROOM_WIDTH;
+
+
+// ===========================================================================
+// Alrum north bump
+// ===========================================================================
+//
+// Alrum / kitchen continues north beneath the Bryggers, between the
+// viktualierum / krea east partition and the 2013 legacy wall:
+//
+//   x = 9460 -> 11760
+//   y = 9300 -> 9860
+//
+// Depth is DERIVED from the Bryggers plan depth and the provisional
+// northern-row depth.
+//
+// Defined here because it depends on the Bryggers anchors.
+//
+
+ALRUM_NORTH_BUMP_X =
+    BRYGGERS_ROOM_X;
+
+
+ALRUM_NORTH_BUMP_Y =
+    ALRUM_ROOM_NORTH_Y;
+
+
+ALRUM_NORTH_BUMP_WIDTH =
+    BRYGGERS_ROOM_WIDTH;
+
+
+ALRUM_NORTH_BUMP_NORTH_Y =
+    BRYGGERS_SOUTH_PARTITION_Y;
+
+
+ALRUM_NORTH_BUMP_DEPTH =
+    ALRUM_NORTH_BUMP_NORTH_Y
+    - ALRUM_NORTH_BUMP_Y;
