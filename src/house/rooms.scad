@@ -25,6 +25,9 @@ include <rooms/caleb_bedroom.scad>
 include <rooms/playroom_corridor.scad>
 include <rooms/playroom.scad>
 include <rooms/pink_bathroom.scad>
+include <rooms/office.scad>
+include <rooms/tech_room.scad>
+include <rooms/hobby_room.scad>
 include <rooms/stue.scad>
 include <rooms/alrum.scad>
 
@@ -56,6 +59,12 @@ module rooms_2d() {
         playroom_2d();
 
         pink_bathroom_2d();
+
+        office_2d();
+
+        tech_room_2d();
+
+        hobby_room_2d();
 
         stue_2d();
 
@@ -123,6 +132,21 @@ module rooms_preview(
     );
 
     pink_bathroom_preview(
+        height = height,
+        z = z
+    );
+
+    office_preview(
+        height = height,
+        z = z
+    );
+
+    tech_room_preview(
+        height = height,
+        z = z
+    );
+
+    hobby_room_preview(
         height = height,
         z = z
     );

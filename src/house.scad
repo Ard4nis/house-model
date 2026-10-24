@@ -518,6 +518,51 @@ echo(
 
 
 // ---------------------------------------------------------------------------
+// Current extension
+// ---------------------------------------------------------------------------
+
+echo(
+    "Current extension clear width:",
+    EXTENSION_CLEAR_WIDTH
+);
+
+echo(
+    "Office origin / clear size:",
+    [
+        OFFICE_X,
+        OFFICE_Y,
+        OFFICE_WIDTH,
+        OFFICE_DEPTH
+    ]
+);
+
+echo(
+    "Tech room origin / clear size:",
+    [
+        TECH_ROOM_X,
+        TECH_ROOM_Y,
+        TECH_ROOM_WIDTH,
+        TECH_ROOM_DEPTH
+    ]
+);
+
+echo(
+    "Hobby room origin / clear size:",
+    [
+        HOBBY_ROOM_X,
+        HOBBY_ROOM_Y,
+        HOBBY_ROOM_WIDTH,
+        HOBBY_ROOM_DEPTH
+    ]
+);
+
+echo(
+    "Hobby room approximate area m2:",
+    HOBBY_ROOM_AREA_M2
+);
+
+
+// ---------------------------------------------------------------------------
 // Alrum
 // ---------------------------------------------------------------------------
 

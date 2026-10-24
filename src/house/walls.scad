@@ -330,6 +330,49 @@ module partition_walls_2d() {
 
 
 // ===========================================================================
+// Current-extension partitions
+// ===========================================================================
+//
+// Kept separate from the main-house partitions because they stand on the
+// lower extension floor (EAST_EXTENSION_FLOOR_Z).
+//
+
+// Has a door into the tech room (cut later).
+module office_east_partition_2d() {
+    translate([
+        OFFICE_EAST_PARTITION_X,
+        OFFICE_EAST_PARTITION_Y
+    ])
+        square([
+            WALL_PARTITION,
+            OFFICE_EAST_PARTITION_LENGTH
+        ]);
+}
+
+
+// Has a door from the office into the hobby room (cut later).
+module extension_south_rooms_north_partition_2d() {
+    translate([
+        EXTENSION_SOUTH_ROOMS_NORTH_PARTITION_X,
+        EXTENSION_SOUTH_ROOMS_NORTH_PARTITION_Y
+    ])
+        square([
+            EXTENSION_SOUTH_ROOMS_NORTH_PARTITION_LENGTH,
+            WALL_PARTITION
+        ]);
+}
+
+
+module extension_partition_walls_2d() {
+    union() {
+        office_east_partition_2d();
+
+        extension_south_rooms_north_partition_2d();
+    }
+}
+
+
+// ===========================================================================
 // Partial-height walls
 // ===========================================================================
 
@@ -382,6 +425,8 @@ module house_walls_2d() {
 
         partition_walls_2d();
 
+        extension_partition_walls_2d();
+
         half_walls_2d();
     }
 }
@@ -416,6 +461,10 @@ module partition_walls_preview(
 ) {
     linear_extrude(height = height)
         partition_walls_2d();
+
+    translate([0, 0, EAST_EXTENSION_FLOOR_Z])
+        linear_extrude(height = height)
+            extension_partition_walls_2d();
 }
 
 

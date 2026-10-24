@@ -1699,3 +1699,220 @@ PINK_BATHROOM_EAST_PARTITION_Y =
 
 PINK_BATHROOM_EAST_PARTITION_LENGTH =
     PINK_BATHROOM_DEPTH;
+
+
+// ===========================================================================
+// Current extension — anchors
+// ===========================================================================
+//
+// The newest 4 m addition east of the current-extension legacy wall.
+//
+// Its finished floor is EAST_EXTENSION_FLOOR_Z (approximately -300).
+//
+//   x = 17140 -> 20740
+//   y = 5500  -> 12600
+//
+//   clear envelope: 3600 x 7100 mm
+//
+// Current layout:
+//
+//   x: 17140              19440 19540   20740
+//    ┌──────────────────────────────────────┐ 12600
+//    │                                      │
+//    │  Hobby room                          │
+//    │                                      │
+//    ← playroom corridor                    │
+//    │                                      │
+//    ├──────────────────────┬─┬─────────────┤ 7600
+//    │  Office              │ │  Tech room  │ 7500
+//    │                      │ │             │
+//    └──────────────────────┴─┴─────────────┘ 5500
+//
+// ASSUMPTION: the office is at the west end and the tech room at the east
+// end.
+//
+// Doors (cut later):
+//
+//   - office -> tech room
+//   - office -> hobby room
+//
+
+EXTENSION_WEST_X =
+    LEGACY_CURRENT_EXTENSION_WALL_X
+    + WALL_LEGACY_EXTERIOR;
+
+
+EXTENSION_EAST_X =
+    HOUSE_MAX_WIDTH
+    - WALL_EXTERIOR;
+
+
+EXTENSION_SOUTH_Y =
+    NORTH_BLOCK_SOUTH_Y
+    + WALL_EXTERIOR;
+
+
+EXTENSION_NORTH_Y =
+    HOUSE_NORTH_INTERIOR_Y;
+
+
+EXTENSION_CLEAR_WIDTH =
+    EXTENSION_EAST_X
+    - EXTENSION_WEST_X;
+
+
+// ===========================================================================
+// Office
+// ===========================================================================
+//
+//   x = 17140 -> 19440
+//   y = 5500  -> 7500
+//
+//   clear size: 2300 x 2000 mm
+//
+
+OFFICE_X =
+    EXTENSION_WEST_X;
+
+
+OFFICE_Y =
+    EXTENSION_SOUTH_Y;
+
+
+// PROVISIONAL. Approximate, from the user.
+OFFICE_WIDTH = 2300;
+
+
+// PROVISIONAL. Approximate, from the user.
+//
+// Shared by the office and tech room.
+EXTENSION_SOUTH_ROOMS_DEPTH = 2000;
+
+
+OFFICE_DEPTH =
+    EXTENSION_SOUTH_ROOMS_DEPTH;
+
+
+OFFICE_AREA_M2 =
+    (
+        OFFICE_WIDTH
+        * OFFICE_DEPTH
+    )
+    / 1000000;
+
+
+// ---------------------------------------------------------------------------
+// Office / tech room partition
+// ---------------------------------------------------------------------------
+//
+// Has a door into the tech room (cut later).
+//
+//   x = 19440 -> 19540
+//   y = 5500  -> 7500
+//
+
+OFFICE_EAST_PARTITION_X =
+    OFFICE_X
+    + OFFICE_WIDTH;
+
+
+OFFICE_EAST_PARTITION_Y =
+    OFFICE_Y;
+
+
+OFFICE_EAST_PARTITION_LENGTH =
+    OFFICE_DEPTH;
+
+
+// ===========================================================================
+// Tech room
+// ===========================================================================
+//
+// Takes the remainder of the south strip.
+//
+//   x = 19540 -> 20740
+//   y = 5500  -> 7500
+//
+//   clear size: 1200 x 2000 mm
+//
+
+TECH_ROOM_X =
+    OFFICE_EAST_PARTITION_X
+    + WALL_PARTITION;
+
+
+TECH_ROOM_Y =
+    EXTENSION_SOUTH_Y;
+
+
+// DERIVED.
+TECH_ROOM_WIDTH =
+    EXTENSION_EAST_X
+    - TECH_ROOM_X;
+
+
+TECH_ROOM_DEPTH =
+    EXTENSION_SOUTH_ROOMS_DEPTH;
+
+
+// ---------------------------------------------------------------------------
+// Office + tech room north partition
+// ---------------------------------------------------------------------------
+//
+// Separates the south rooms from the hobby room.
+//
+// Has a door from the office into the hobby room (cut later).
+//
+//   x = 17140 -> 20740
+//   y = 7500  -> 7600
+//
+
+EXTENSION_SOUTH_ROOMS_NORTH_PARTITION_X =
+    EXTENSION_WEST_X;
+
+
+EXTENSION_SOUTH_ROOMS_NORTH_PARTITION_Y =
+    EXTENSION_SOUTH_Y
+    + EXTENSION_SOUTH_ROOMS_DEPTH;
+
+
+EXTENSION_SOUTH_ROOMS_NORTH_PARTITION_LENGTH =
+    EXTENSION_CLEAR_WIDTH;
+
+
+// ===========================================================================
+// Hobby room
+// ===========================================================================
+//
+// Remainder of the extension. Entered from the playroom corridor.
+//
+//   x = 17140 -> 20740
+//   y = 7600  -> 12600
+//
+//   clear size: 3600 x 5000 mm
+//
+
+HOBBY_ROOM_X =
+    EXTENSION_WEST_X;
+
+
+HOBBY_ROOM_Y =
+    EXTENSION_SOUTH_ROOMS_NORTH_PARTITION_Y
+    + WALL_PARTITION;
+
+
+HOBBY_ROOM_WIDTH =
+    EXTENSION_CLEAR_WIDTH;
+
+
+HOBBY_ROOM_DEPTH =
+    EXTENSION_NORTH_Y
+    - HOBBY_ROOM_Y;
+
+
+HOBBY_ROOM_AREA_M2 =
+    (
+        HOBBY_ROOM_WIDTH
+        * HOBBY_ROOM_DEPTH
+    )
+    / 1000000;
