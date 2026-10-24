@@ -154,17 +154,17 @@ module nova_north_partition_2d() {
 
 
 // ---------------------------------------------------------------------------
-// Bathroom / master bedroom
+// Green bathroom / master bedroom
 // ---------------------------------------------------------------------------
 
-module bathroom_east_partition_2d() {
+module green_bathroom_east_partition_2d() {
     translate([
-        BATHROOM_EAST_PARTITION_X,
-        BATHROOM_EAST_PARTITION_Y
+        GREEN_BATHROOM_EAST_PARTITION_X,
+        GREEN_BATHROOM_EAST_PARTITION_Y
     ])
         square([
             WALL_PARTITION,
-            BATHROOM_EAST_PARTITION_LENGTH
+            GREEN_BATHROOM_EAST_PARTITION_LENGTH
         ]);
 }
 
@@ -242,6 +242,59 @@ module bryggers_south_partition_2d() {
 
 
 // ---------------------------------------------------------------------------
+// 2013 addition
+// ---------------------------------------------------------------------------
+
+module caleb_north_partition_2d() {
+    translate([
+        CALEB_NORTH_PARTITION_X,
+        CALEB_NORTH_PARTITION_Y
+    ])
+        square([
+            CALEB_NORTH_PARTITION_LENGTH,
+            WALL_PARTITION
+        ]);
+}
+
+
+module addition_2013_corridor_north_partition_2d() {
+    translate([
+        ADDITION_2013_CORRIDOR_NORTH_PARTITION_X,
+        ADDITION_2013_CORRIDOR_NORTH_PARTITION_Y
+    ])
+        square([
+            ADDITION_2013_CORRIDOR_NORTH_PARTITION_LENGTH,
+            WALL_PARTITION
+        ]);
+}
+
+
+// Has a door into the playroom corridor (cut later).
+module hallway_east_partition_2d() {
+    translate([
+        HALLWAY_EAST_PARTITION_X,
+        HALLWAY_EAST_PARTITION_Y
+    ])
+        square([
+            WALL_PARTITION,
+            HALLWAY_EAST_PARTITION_LENGTH
+        ]);
+}
+
+
+module pink_bathroom_east_partition_2d() {
+    translate([
+        PINK_BATHROOM_EAST_PARTITION_X,
+        PINK_BATHROOM_EAST_PARTITION_Y
+    ])
+        square([
+            WALL_PARTITION,
+            PINK_BATHROOM_EAST_PARTITION_LENGTH
+        ]);
+}
+
+
+// ---------------------------------------------------------------------------
 // Combined full-height partitions
 // ---------------------------------------------------------------------------
 
@@ -253,7 +306,7 @@ module partition_walls_2d() {
 
         nova_north_partition_2d();
 
-        bathroom_east_partition_2d();
+        green_bathroom_east_partition_2d();
 
         master_bedroom_south_partition_2d();
 
@@ -264,6 +317,14 @@ module partition_walls_2d() {
         krea_east_partition_2d();
 
         bryggers_south_partition_2d();
+
+        caleb_north_partition_2d();
+
+        addition_2013_corridor_north_partition_2d();
+
+        hallway_east_partition_2d();
+
+        pink_bathroom_east_partition_2d();
     }
 }
 

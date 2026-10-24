@@ -1,7 +1,7 @@
 /*
- * Bathroom
+ * Green bathroom
  *
- * North-west corner bathroom, directly north of Nova's bedroom.
+ * The "big bathroom": north-west corner, directly north of Nova's bedroom.
  *
  * Defines the clear usable room space.
  *
@@ -15,14 +15,14 @@
 // 2D clear room
 // ===========================================================================
 
-module bathroom_2d() {
+module green_bathroom_2d() {
     translate([
-        BATHROOM_X,
-        BATHROOM_Y
+        GREEN_BATHROOM_X,
+        GREEN_BATHROOM_Y
     ])
         square([
-            BATHROOM_WIDTH,
-            BATHROOM_DEPTH
+            GREEN_BATHROOM_WIDTH,
+            GREEN_BATHROOM_DEPTH
         ]);
 }
 
@@ -36,11 +36,11 @@ module bathroom_2d() {
 // This is NOT the final printable house floor.
 //
 
-module bathroom_preview(
+module green_bathroom_preview(
     height = 25,
     z = 25
 ) {
     translate([0, 0, z])
         linear_extrude(height = height)
-            bathroom_2d();
+            green_bathroom_2d();
 }

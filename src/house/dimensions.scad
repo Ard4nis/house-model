@@ -654,10 +654,10 @@ NOVA_NORTH_PARTITION_LENGTH =
 
 
 // ===========================================================================
-// Bathroom
+// Green bathroom
 // ===========================================================================
 //
-// North-west corner bathroom, directly north of Nova's bedroom.
+// The "big bathroom": north-west corner, directly north of Nova's bedroom.
 //
 // Historical drawing:
 //
@@ -686,40 +686,40 @@ NOVA_NORTH_PARTITION_LENGTH =
 // Clear room
 // ---------------------------------------------------------------------------
 
-BATHROOM_X =
+GREEN_BATHROOM_X =
     WALL_EXTERIOR;
 
 
-BATHROOM_Y =
+GREEN_BATHROOM_Y =
     NOVA_NORTH_PARTITION_Y
     + WALL_PARTITION;
 
 
 // PLAN.
-BATHROOM_WIDTH =
+GREEN_BATHROOM_WIDTH =
     PLAN_NORTH_BATH_WIDTH;
 
 
-BATHROOM_NORTH_Y =
+GREEN_BATHROOM_NORTH_Y =
     HOUSE_NORTH_INTERIOR_Y;
 
 
 // DERIVED, confirmed by rough measurement.
-BATHROOM_DEPTH =
-    BATHROOM_NORTH_Y
-    - BATHROOM_Y;
+GREEN_BATHROOM_DEPTH =
+    GREEN_BATHROOM_NORTH_Y
+    - GREEN_BATHROOM_Y;
 
 
-BATHROOM_PLAN_DEPTH_DIFFERENCE =
-    BATHROOM_DEPTH
+GREEN_BATHROOM_PLAN_DEPTH_DIFFERENCE =
+    GREEN_BATHROOM_DEPTH
     - PLAN_NW_BATH_DEPTH;
 
 
 // ---------------------------------------------------------------------------
-// Bathroom east partition
+// Green bathroom east partition
 // ---------------------------------------------------------------------------
 //
-// Separates the bathroom from the master bedroom.
+// Separates the green bathroom from the master bedroom.
 //
 // Runs from Nova's north partition to the north exterior wall:
 //
@@ -730,17 +730,17 @@ BATHROOM_PLAN_DEPTH_DIFFERENCE =
 // LEGACY_2013_EAST_WALL_X.
 //
 
-BATHROOM_EAST_PARTITION_X =
-    BATHROOM_X
-    + BATHROOM_WIDTH;
+GREEN_BATHROOM_EAST_PARTITION_X =
+    GREEN_BATHROOM_X
+    + GREEN_BATHROOM_WIDTH;
 
 
-BATHROOM_EAST_PARTITION_Y =
-    BATHROOM_Y;
+GREEN_BATHROOM_EAST_PARTITION_Y =
+    GREEN_BATHROOM_Y;
 
 
-BATHROOM_EAST_PARTITION_LENGTH =
-    BATHROOM_DEPTH;
+GREEN_BATHROOM_EAST_PARTITION_LENGTH =
+    GREEN_BATHROOM_DEPTH;
 
 
 // ===========================================================================
@@ -960,7 +960,7 @@ ALRUM_SKYLIGHT_DEPTH =
 // ---------------------------------------------------------------------------
 
 MASTER_BEDROOM_X =
-    BATHROOM_EAST_PARTITION_X
+    GREEN_BATHROOM_EAST_PARTITION_X
     + WALL_PARTITION;
 
 
@@ -980,7 +980,7 @@ MASTER_BEDROOM_NORTH_Y =
     HOUSE_NORTH_INTERIOR_Y;
 
 
-// South edge beside the bathroom / above Nova's room.
+// South edge beside the green bathroom / above Nova's room.
 MASTER_BEDROOM_WEST_SOUTH_Y =
     NOVA_NORTH_PARTITION_Y
     + WALL_PARTITION;
@@ -1274,6 +1274,8 @@ BRYGGERS_SOUTH_PARTITION_LENGTH =
 //   x = 9460 -> 11760
 //   y = 9300 -> 9860
 //
+// Semantically part of the kitchen zone: holds the fridge and freezer.
+//
 // Depth is DERIVED from the Bryggers plan depth and the provisional
 // northern-row depth.
 //
@@ -1299,3 +1301,401 @@ ALRUM_NORTH_BUMP_NORTH_Y =
 ALRUM_NORTH_BUMP_DEPTH =
     ALRUM_NORTH_BUMP_NORTH_Y
     - ALRUM_NORTH_BUMP_Y;
+
+
+// ===========================================================================
+// 2013 addition — anchors
+// ===========================================================================
+//
+// The 2013 addition lies between the two internal legacy walls:
+//
+//   x = 12160 -> 16740
+//   y = 5500  -> 12600
+//
+//   clear envelope: 4580 x 7100 mm
+//
+// Current layout:
+//
+//   x: 12160    13660 13760                   16740
+//    ┌──────────┬─┬────────────────────────────┐ 12600
+//    │  Pink    │ │  Playroom                  │
+//    │  bath    │ │                            │
+//    ├──────────┴─┴────────────────────────────┤ 9370
+//    │  Hallway ┃    Playroom corridor  →  ext.│ 9270
+//    ├──────────┴─┴────────────────────────────┤ 8270
+//    │  Caleb's room (full width)              │ 8170
+//    │                                         │
+//    └─────────────────────────────────────────┘ 5500
+//
+// Entering from Alrum through the 2013 legacy wall leads into a small
+// hallway with doors to the pink bathroom, Caleb's room and the playroom
+// corridor.
+//
+// The playroom corridor and playroom were split from the old NE bedroom by
+// a newer wall.
+//
+
+ADDITION_2013_WEST_X =
+    LEGACY_2013_EAST_WALL_X
+    + WALL_LEGACY_EXTERIOR;
+
+
+ADDITION_2013_EAST_X =
+    LEGACY_CURRENT_EXTENSION_WALL_X;
+
+
+ADDITION_2013_SOUTH_Y =
+    NORTH_BLOCK_SOUTH_Y
+    + WALL_EXTERIOR;
+
+
+ADDITION_2013_NORTH_Y =
+    HOUSE_NORTH_INTERIOR_Y;
+
+
+ADDITION_2013_WIDTH =
+    ADDITION_2013_EAST_X
+    - ADDITION_2013_WEST_X;
+
+
+// ---------------------------------------------------------------------------
+// West strip / east rooms split (north of Caleb's room)
+// ---------------------------------------------------------------------------
+//
+// The old drawing's PLAN_NORTH_SMALL_SECTION_WIDTH (now the pink bathroom)
+// sets the width of the west strip containing the pink bathroom and the
+// hallway.
+//
+// Partition between the west strip and the playroom / corridor:
+//
+//   x = 13660 -> 13760
+//
+
+ADDITION_2013_WEST_STRIP_WIDTH =
+    PLAN_NORTH_SMALL_SECTION_WIDTH;
+
+
+ADDITION_2013_INNER_PARTITION_X =
+    ADDITION_2013_WEST_X
+    + ADDITION_2013_WEST_STRIP_WIDTH;
+
+
+ADDITION_2013_EAST_ROOMS_X =
+    ADDITION_2013_INNER_PARTITION_X
+    + WALL_PARTITION;
+
+
+// DERIVED. Compare with PLAN_NE_BEDROOM_WIDTH (2980).
+ADDITION_2013_EAST_ROOMS_WIDTH =
+    ADDITION_2013_EAST_X
+    - ADDITION_2013_EAST_ROOMS_X;
+
+
+// ===========================================================================
+// Caleb's room
+// ===========================================================================
+//
+// Shown on the historical drawing as PLAN_SE_BEDROOM.
+//
+// Runs the full width of the 2013 addition, from the 2013 legacy wall
+// (backing onto the kitchen) to the current-extension legacy wall.
+//
+//   x = 12160 -> 16740
+//   y = 5500  -> 8170
+//
+//   clear size: 4580 x 2670 mm
+//
+// Depth is the PLAN value. The 90 mm by which the plan falls short of the
+// modelled 2013 addition depth is given to the old NE bedroom.
+//
+
+CALEB_ROOM_X =
+    ADDITION_2013_WEST_X;
+
+
+CALEB_ROOM_Y =
+    ADDITION_2013_SOUTH_Y;
+
+
+CALEB_ROOM_WIDTH =
+    ADDITION_2013_WIDTH;
+
+
+// PLAN.
+CALEB_ROOM_DEPTH =
+    PLAN_SE_BEDROOM_DEPTH;
+
+
+CALEB_ROOM_AREA_M2 =
+    (
+        CALEB_ROOM_WIDTH
+        * CALEB_ROOM_DEPTH
+    )
+    / 1000000;
+
+
+// ---------------------------------------------------------------------------
+// Caleb north partition
+// ---------------------------------------------------------------------------
+//
+// Separates Caleb's room from the hallway and playroom corridor.
+//
+//   x = 12160 -> 16740
+//   y = 8170  -> 8270
+//
+
+CALEB_NORTH_PARTITION_X =
+    CALEB_ROOM_X;
+
+
+CALEB_NORTH_PARTITION_Y =
+    CALEB_ROOM_Y
+    + CALEB_ROOM_DEPTH;
+
+
+CALEB_NORTH_PARTITION_LENGTH =
+    CALEB_ROOM_WIDTH;
+
+
+// ===========================================================================
+// Old NE bedroom — split into playroom corridor + playroom
+// ===========================================================================
+//
+// Historical drawing: PLAN_NE_BEDROOM, 2980 x 4240 mm.
+//
+// Modelled old-bedroom depth:
+//
+//   y = 8270 -> 12600 = 4330 mm   (+90 mm vs plan, accepted)
+//
+
+OLD_NE_BEDROOM_Y =
+    CALEB_NORTH_PARTITION_Y
+    + WALL_PARTITION;
+
+
+OLD_NE_BEDROOM_DEPTH =
+    ADDITION_2013_NORTH_Y
+    - OLD_NE_BEDROOM_Y;
+
+
+OLD_NE_BEDROOM_PLAN_DEPTH_DIFFERENCE =
+    OLD_NE_BEDROOM_DEPTH
+    - PLAN_NE_BEDROOM_DEPTH;
+
+
+// PROVISIONAL. Approximate, from the user.
+//
+// Shared north-south depth of the hallway and playroom corridor.
+ADDITION_2013_CORRIDOR_DEPTH = 1000;
+
+
+ADDITION_2013_CORRIDOR_Y =
+    OLD_NE_BEDROOM_Y;
+
+
+ADDITION_2013_CORRIDOR_NORTH_Y =
+    ADDITION_2013_CORRIDOR_Y
+    + ADDITION_2013_CORRIDOR_DEPTH;
+
+
+// ---------------------------------------------------------------------------
+// Corridor north partition
+// ---------------------------------------------------------------------------
+//
+// One continuous wall across the 2013 addition:
+//
+//   - pink bathroom south wall
+//   - newer playroom / corridor wall
+//
+//   x = 12160 -> 16740
+//   y = 9270  -> 9370
+//
+
+ADDITION_2013_CORRIDOR_NORTH_PARTITION_X =
+    ADDITION_2013_WEST_X;
+
+
+ADDITION_2013_CORRIDOR_NORTH_PARTITION_Y =
+    ADDITION_2013_CORRIDOR_NORTH_Y;
+
+
+ADDITION_2013_CORRIDOR_NORTH_PARTITION_LENGTH =
+    ADDITION_2013_WIDTH;
+
+
+// ===========================================================================
+// Hallway
+// ===========================================================================
+//
+// Small hallway just inside the 2013 legacy wall, entered from Alrum.
+//
+// Doors to:
+//
+//   - pink bathroom      (north)
+//   - Caleb's room       (south)
+//   - playroom corridor  (east)
+//
+//   x = 12160 -> 13660
+//   y = 8270  -> 9270
+//
+//   clear size: 1500 x 1000 mm
+//
+// Remembered as roughly 1 x 1 m. The width here follows the pink bathroom
+// so the west-strip partition stays one straight wall.
+//
+
+HALLWAY_X =
+    ADDITION_2013_WEST_X;
+
+
+HALLWAY_Y =
+    ADDITION_2013_CORRIDOR_Y;
+
+
+HALLWAY_WIDTH =
+    ADDITION_2013_WEST_STRIP_WIDTH;
+
+
+HALLWAY_DEPTH =
+    ADDITION_2013_CORRIDOR_DEPTH;
+
+
+// ---------------------------------------------------------------------------
+// Hallway / playroom corridor partition
+// ---------------------------------------------------------------------------
+//
+// Has a door into the playroom corridor (cut later).
+//
+//   x = 13660 -> 13760
+//   y = 8270  -> 9270
+//
+
+HALLWAY_EAST_PARTITION_X =
+    ADDITION_2013_INNER_PARTITION_X;
+
+
+HALLWAY_EAST_PARTITION_Y =
+    HALLWAY_Y;
+
+
+HALLWAY_EAST_PARTITION_LENGTH =
+    HALLWAY_DEPTH;
+
+
+// ===========================================================================
+// Playroom corridor
+// ===========================================================================
+//
+// South strip of the old NE bedroom, leading east to the current
+// extension.
+//
+//   x = 13760 -> 16740
+//   y = 8270  -> 9270
+//
+//   clear size: 2980 x 1000 mm
+//
+
+PLAYROOM_CORRIDOR_X =
+    ADDITION_2013_EAST_ROOMS_X;
+
+
+PLAYROOM_CORRIDOR_Y =
+    ADDITION_2013_CORRIDOR_Y;
+
+
+PLAYROOM_CORRIDOR_WIDTH =
+    ADDITION_2013_EAST_ROOMS_WIDTH;
+
+
+PLAYROOM_CORRIDOR_DEPTH =
+    ADDITION_2013_CORRIDOR_DEPTH;
+
+
+// ===========================================================================
+// Playroom
+// ===========================================================================
+//
+// Remaining north part of the old NE bedroom.
+//
+//   x = 13760 -> 16740
+//   y = 9370  -> 12600
+//
+//   clear size: 2980 x 3230 mm
+//
+
+PLAYROOM_X =
+    ADDITION_2013_EAST_ROOMS_X;
+
+
+PLAYROOM_Y =
+    ADDITION_2013_CORRIDOR_NORTH_PARTITION_Y
+    + WALL_PARTITION;
+
+
+PLAYROOM_WIDTH =
+    ADDITION_2013_EAST_ROOMS_WIDTH;
+
+
+PLAYROOM_DEPTH =
+    ADDITION_2013_NORTH_Y
+    - PLAYROOM_Y;
+
+
+PLAYROOM_AREA_M2 =
+    (
+        PLAYROOM_WIDTH
+        * PLAYROOM_DEPTH
+    )
+    / 1000000;
+
+
+// ===========================================================================
+// Pink bathroom
+// ===========================================================================
+//
+// The "little bathroom". Shown on the historical drawing as
+// PLAN_NORTH_SMALL_SECTION.
+//
+// Same depth as the playroom.
+//
+//   x = 12160 -> 13660
+//   y = 9370  -> 12600
+//
+//   clear size: 1500 x 3230 mm
+//
+
+PINK_BATHROOM_X =
+    ADDITION_2013_WEST_X;
+
+
+PINK_BATHROOM_Y =
+    PLAYROOM_Y;
+
+
+// PLAN.
+PINK_BATHROOM_WIDTH =
+    ADDITION_2013_WEST_STRIP_WIDTH;
+
+
+PINK_BATHROOM_DEPTH =
+    PLAYROOM_DEPTH;
+
+
+// ---------------------------------------------------------------------------
+// Pink bathroom / playroom partition
+// ---------------------------------------------------------------------------
+//
+//   x = 13660 -> 13760
+//   y = 9370  -> 12600
+//
+
+PINK_BATHROOM_EAST_PARTITION_X =
+    ADDITION_2013_INNER_PARTITION_X;
+
+
+PINK_BATHROOM_EAST_PARTITION_Y =
+    PINK_BATHROOM_Y;
+
+
+PINK_BATHROOM_EAST_PARTITION_LENGTH =
+    PINK_BATHROOM_DEPTH;

@@ -297,37 +297,37 @@ echo(
 
 
 // ---------------------------------------------------------------------------
-// Bathroom
+// Green bathroom
 // ---------------------------------------------------------------------------
 
 echo(
-    "Bathroom origin:",
+    "Green bathroom origin:",
     [
-        BATHROOM_X,
-        BATHROOM_Y
+        GREEN_BATHROOM_X,
+        GREEN_BATHROOM_Y
     ]
 );
 
 echo(
-    "Bathroom clear size:",
+    "Green bathroom clear size:",
     [
-        BATHROOM_WIDTH,
-        BATHROOM_DEPTH
+        GREEN_BATHROOM_WIDTH,
+        GREEN_BATHROOM_DEPTH
     ]
 );
 
 echo(
-    "Bathroom plan depth difference:",
-    BATHROOM_PLAN_DEPTH_DIFFERENCE
+    "Green bathroom plan depth difference:",
+    GREEN_BATHROOM_PLAN_DEPTH_DIFFERENCE
 );
 
 echo(
-    "Bathroom east partition:",
+    "Green bathroom east partition:",
     [
-        BATHROOM_EAST_PARTITION_X,
-        BATHROOM_EAST_PARTITION_Y,
+        GREEN_BATHROOM_EAST_PARTITION_X,
+        GREEN_BATHROOM_EAST_PARTITION_Y,
         WALL_PARTITION,
-        BATHROOM_EAST_PARTITION_LENGTH
+        GREEN_BATHROOM_EAST_PARTITION_LENGTH
     ]
 );
 
@@ -440,6 +440,84 @@ echo(
 
 
 // ---------------------------------------------------------------------------
+// 2013 addition
+// ---------------------------------------------------------------------------
+
+echo(
+    "2013 addition east-rooms width (plan 2980):",
+    ADDITION_2013_EAST_ROOMS_WIDTH
+);
+
+echo(
+    "Caleb room origin / clear size:",
+    [
+        CALEB_ROOM_X,
+        CALEB_ROOM_Y,
+        CALEB_ROOM_WIDTH,
+        CALEB_ROOM_DEPTH
+    ]
+);
+
+echo(
+    "Caleb room approximate area m2:",
+    CALEB_ROOM_AREA_M2
+);
+
+echo(
+    "Old NE bedroom depth / plan difference:",
+    [
+        OLD_NE_BEDROOM_DEPTH,
+        OLD_NE_BEDROOM_PLAN_DEPTH_DIFFERENCE
+    ]
+);
+
+echo(
+    "Hallway origin / clear size:",
+    [
+        HALLWAY_X,
+        HALLWAY_Y,
+        HALLWAY_WIDTH,
+        HALLWAY_DEPTH
+    ]
+);
+
+echo(
+    "Playroom corridor origin / clear size:",
+    [
+        PLAYROOM_CORRIDOR_X,
+        PLAYROOM_CORRIDOR_Y,
+        PLAYROOM_CORRIDOR_WIDTH,
+        PLAYROOM_CORRIDOR_DEPTH
+    ]
+);
+
+echo(
+    "Playroom origin / clear size:",
+    [
+        PLAYROOM_X,
+        PLAYROOM_Y,
+        PLAYROOM_WIDTH,
+        PLAYROOM_DEPTH
+    ]
+);
+
+echo(
+    "Playroom approximate area m2:",
+    PLAYROOM_AREA_M2
+);
+
+echo(
+    "Pink bathroom origin / clear size:",
+    [
+        PINK_BATHROOM_X,
+        PINK_BATHROOM_Y,
+        PINK_BATHROOM_WIDTH,
+        PINK_BATHROOM_DEPTH
+    ]
+);
+
+
+// ---------------------------------------------------------------------------
 // Alrum
 // ---------------------------------------------------------------------------
 
@@ -465,7 +543,7 @@ echo(
 );
 
 echo(
-    "Alrum north bump:",
+    "Alrum north bump (kitchen fridge/freezer alcove):",
     [
         ALRUM_NORTH_BUMP_X,
         ALRUM_NORTH_BUMP_Y,

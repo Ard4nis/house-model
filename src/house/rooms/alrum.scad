@@ -75,15 +75,33 @@ module alrum_2d() {
 //   - planning
 //
 
+// The kitchen has two parts:
+//
+//   - main kitchen against the 2013 legacy wall, south of the Gang
+//   - fridge / freezer alcove in the north bump beneath the Bryggers
+//
 module alrum_kitchen_zone_2d() {
-    translate([
-        ALRUM_KITCHEN_X,
-        ALRUM_KITCHEN_Y
-    ])
-        square([
-            ALRUM_KITCHEN_WIDTH,
-            ALRUM_KITCHEN_DEPTH
-        ]);
+    union() {
+        translate([
+            ALRUM_KITCHEN_X,
+            ALRUM_KITCHEN_Y
+        ])
+            square([
+                ALRUM_KITCHEN_WIDTH,
+                ALRUM_KITCHEN_DEPTH
+            ]);
+
+
+        // Fridge / freezer alcove.
+        translate([
+            ALRUM_NORTH_BUMP_X,
+            ALRUM_NORTH_BUMP_Y
+        ])
+            square([
+                ALRUM_NORTH_BUMP_WIDTH,
+                ALRUM_NORTH_BUMP_DEPTH
+            ]);
+    }
 }
 
 
