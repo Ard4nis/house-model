@@ -528,7 +528,8 @@ ALRUM_ROOM_DEPTH =
 //   Nova's room extends approximately 300 mm farther north than Alrum.
 //
 // The small black wall projection visible in the Entré area of the
-// historical drawing corresponds to the continuation of Nova's east wall.
+// historical drawing (now the master bedroom) corresponds to the
+// continuation of Nova's east wall.
 //
 // Current model:
 //
@@ -594,7 +595,8 @@ NOVA_ROOM_PLAN_DEPTH_DIFFERENCE =
 //
 // The partition continues beyond Alrum by approximately 300 mm.
 //
-// This creates the small wall projection seen in the Entré area.
+// This creates the small wall projection in the master bedroom
+// (the Entré on the historical drawing).
 //
 
 NOVA_EAST_PARTITION_X =
@@ -714,7 +716,7 @@ BATHROOM_PLAN_DEPTH_DIFFERENCE =
 // Bathroom east partition
 // ---------------------------------------------------------------------------
 //
-// Separates the bathroom from the Entré.
+// Separates the bathroom from the master bedroom.
 //
 // Runs from Nova's north partition to the north exterior wall:
 //
@@ -922,3 +924,145 @@ ALRUM_SKYLIGHT_WIDTH =
 ALRUM_SKYLIGHT_DEPTH =
     ALRUM_SKYLIGHT_NORTH_Y
     - ALRUM_SKYLIGHT_Y;
+
+
+// ===========================================================================
+// Master bedroom
+// ===========================================================================
+//
+// The historical drawing shows the Entré and the room east of it
+// (PLAN_NORTH_BEDROOM_1) as two separate rooms.
+//
+// The partition between them was removed and the combined space is now
+// the master bedroom. It is no longer an entrance.
+//
+// Former partition position, kept for reference only:
+//
+//   x = 4210 -> 4310
+//
+// The room is L-shaped where it meets Nova's bedroom:
+//
+//   x = 2500 -> 3200   south edge y = 9700  (Nova's north partition)
+//   x = 3200 -> 6790   south edge y = 9400  (northern-row south partition)
+//
+// The 300 mm step between those two south edges is the wall projection
+// visible in the Entré area of the historical drawing.
+//
+// Defined after Alrum because it depends on Alrum's anchors.
+//
+
+
+// ---------------------------------------------------------------------------
+// Clear room
+// ---------------------------------------------------------------------------
+
+MASTER_BEDROOM_X =
+    BATHROOM_EAST_PARTITION_X
+    + WALL_PARTITION;
+
+
+// PLAN widths, plus the floor area of the removed partition.
+MASTER_BEDROOM_WIDTH =
+    PLAN_ENTRANCE_WIDTH
+    + WALL_PARTITION
+    + PLAN_NORTH_BEDROOM_1_WIDTH;
+
+
+MASTER_BEDROOM_EAST_X =
+    MASTER_BEDROOM_X
+    + MASTER_BEDROOM_WIDTH;
+
+
+MASTER_BEDROOM_NORTH_Y =
+    HOUSE_NORTH_INTERIOR_Y;
+
+
+// South edge beside the bathroom / above Nova's room.
+MASTER_BEDROOM_WEST_SOUTH_Y =
+    NOVA_NORTH_PARTITION_Y
+    + WALL_PARTITION;
+
+
+// X where the south edge steps down to the northern-row partition.
+MASTER_BEDROOM_STEP_X =
+    ALRUM_ROOM_X;
+
+
+// PROVISIONAL.
+//
+// Follows the provisional Alrum north boundary.
+MASTER_BEDROOM_SOUTH_Y =
+    ALRUM_ROOM_NORTH_Y
+    + WALL_PARTITION;
+
+
+MASTER_BEDROOM_POINTS = [
+    [MASTER_BEDROOM_X,      MASTER_BEDROOM_WEST_SOUTH_Y],
+    [MASTER_BEDROOM_STEP_X, MASTER_BEDROOM_WEST_SOUTH_Y],
+    [MASTER_BEDROOM_STEP_X, MASTER_BEDROOM_SOUTH_Y],
+    [MASTER_BEDROOM_EAST_X, MASTER_BEDROOM_SOUTH_Y],
+    [MASTER_BEDROOM_EAST_X, MASTER_BEDROOM_NORTH_Y],
+    [MASTER_BEDROOM_X,      MASTER_BEDROOM_NORTH_Y]
+];
+
+
+MASTER_BEDROOM_AREA_M2 =
+    (
+        MASTER_BEDROOM_WIDTH
+        * (MASTER_BEDROOM_NORTH_Y - MASTER_BEDROOM_SOUTH_Y)
+        - (MASTER_BEDROOM_STEP_X - MASTER_BEDROOM_X)
+        * (MASTER_BEDROOM_WEST_SOUTH_Y - MASTER_BEDROOM_SOUTH_Y)
+    )
+    / 1000000;
+
+
+// ---------------------------------------------------------------------------
+// Master bedroom / Alrum partition
+// ---------------------------------------------------------------------------
+//
+// South wall of the northern row along the master bedroom.
+//
+// Confirmed as a full-height wall with ONE door to Alrum.
+//
+// Solid for now. The door will be cut once its position and width are
+// known.
+//
+//   x = 3200 -> 6890   (includes the corner under the east partition)
+//   y = 9300 -> 9400
+//
+
+MASTER_BEDROOM_SOUTH_PARTITION_X =
+    MASTER_BEDROOM_STEP_X;
+
+
+MASTER_BEDROOM_SOUTH_PARTITION_Y =
+    ALRUM_ROOM_NORTH_Y;
+
+
+MASTER_BEDROOM_SOUTH_PARTITION_LENGTH =
+    MASTER_BEDROOM_EAST_X
+    + WALL_PARTITION
+    - MASTER_BEDROOM_SOUTH_PARTITION_X;
+
+
+// ---------------------------------------------------------------------------
+// Master bedroom east partition
+// ---------------------------------------------------------------------------
+//
+// Former PLAN_NORTH_BEDROOM_1 / PLAN_NORTH_BEDROOM_2 partition.
+//
+//   x = 6790 -> 6890
+//   y = 9400 -> 12600
+//
+
+MASTER_BEDROOM_EAST_PARTITION_X =
+    MASTER_BEDROOM_EAST_X;
+
+
+MASTER_BEDROOM_EAST_PARTITION_Y =
+    MASTER_BEDROOM_SOUTH_Y;
+
+
+MASTER_BEDROOM_EAST_PARTITION_LENGTH =
+    MASTER_BEDROOM_NORTH_Y
+    - MASTER_BEDROOM_SOUTH_Y;

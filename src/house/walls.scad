@@ -122,7 +122,7 @@ module hailey_east_partition_2d() {
 // This wall deliberately extends approximately 300 mm north of Alrum.
 //
 // That continuation corresponds to the small wall projection visible in the
-// Entré area of the historical floor plan.
+// Entré area of the historical floor plan, now the master bedroom.
 //
 
 module nova_east_partition_2d() {
@@ -154,7 +154,7 @@ module nova_north_partition_2d() {
 
 
 // ---------------------------------------------------------------------------
-// Bathroom / Entré
+// Bathroom / master bedroom
 // ---------------------------------------------------------------------------
 
 module bathroom_east_partition_2d() {
@@ -165,6 +165,34 @@ module bathroom_east_partition_2d() {
         square([
             WALL_PARTITION,
             BATHROOM_EAST_PARTITION_LENGTH
+        ]);
+}
+
+
+// ---------------------------------------------------------------------------
+// Master bedroom
+// ---------------------------------------------------------------------------
+
+module master_bedroom_south_partition_2d() {
+    translate([
+        MASTER_BEDROOM_SOUTH_PARTITION_X,
+        MASTER_BEDROOM_SOUTH_PARTITION_Y
+    ])
+        square([
+            MASTER_BEDROOM_SOUTH_PARTITION_LENGTH,
+            WALL_PARTITION
+        ]);
+}
+
+
+module master_bedroom_east_partition_2d() {
+    translate([
+        MASTER_BEDROOM_EAST_PARTITION_X,
+        MASTER_BEDROOM_EAST_PARTITION_Y
+    ])
+        square([
+            WALL_PARTITION,
+            MASTER_BEDROOM_EAST_PARTITION_LENGTH
         ]);
 }
 
@@ -182,6 +210,10 @@ module partition_walls_2d() {
         nova_north_partition_2d();
 
         bathroom_east_partition_2d();
+
+        master_bedroom_south_partition_2d();
+
+        master_bedroom_east_partition_2d();
     }
 }
 

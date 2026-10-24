@@ -333,6 +333,41 @@ echo(
 
 
 // ---------------------------------------------------------------------------
+// Master bedroom
+// ---------------------------------------------------------------------------
+
+echo(
+    "Master bedroom clear outline:",
+    MASTER_BEDROOM_POINTS
+);
+
+echo(
+    "Master bedroom approximate area m2:",
+    MASTER_BEDROOM_AREA_M2
+);
+
+echo(
+    "Master bedroom south partition:",
+    [
+        MASTER_BEDROOM_SOUTH_PARTITION_X,
+        MASTER_BEDROOM_SOUTH_PARTITION_Y,
+        MASTER_BEDROOM_SOUTH_PARTITION_LENGTH,
+        WALL_PARTITION
+    ]
+);
+
+echo(
+    "Master bedroom east partition:",
+    [
+        MASTER_BEDROOM_EAST_PARTITION_X,
+        MASTER_BEDROOM_EAST_PARTITION_Y,
+        WALL_PARTITION,
+        MASTER_BEDROOM_EAST_PARTITION_LENGTH
+    ]
+);
+
+
+// ---------------------------------------------------------------------------
 // Alrum
 // ---------------------------------------------------------------------------
 
