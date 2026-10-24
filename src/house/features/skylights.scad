@@ -62,3 +62,17 @@ module alrum_skylight_marker_preview(
         linear_extrude(height = height)
             alrum_skylight_marker_2d();
 }
+
+
+// ===========================================================================
+// Floor engraving
+// ===========================================================================
+//
+// The marker frame cut into the Alrum floor surface, `depth` deep.
+//
+
+module alrum_skylight_engraving_3d(depth) {
+    translate([0, 0, MAIN_FLOOR_Z - depth])
+        linear_extrude(height = depth + 1)
+            alrum_skylight_marker_2d();
+}

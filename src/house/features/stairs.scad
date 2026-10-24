@@ -33,7 +33,7 @@ function hobby_stair_profile() =
         wv = HOBBY_STAIR_WAIST_VERTICAL,
 
         // Where the soffit meets the floor.
-        u0 = wv * g / r
+        u0 = HOBBY_STAIR_FOOT_CONTACT_LENGTH
     )
     concat(
         [[0, 0]],
@@ -65,6 +65,19 @@ module hobby_room_stair_3d() {
                             HOBBY_STAIR_BOTTOM_Z + p[1]
                         ]
                 ]);
+}
+
+
+// Strip of floor the stair stands on (plan).
+module hobby_room_stair_foot_contact_2d() {
+    translate([
+        HOBBY_STAIR_X,
+        HOBBY_STAIR_FOOT_Y - HOBBY_STAIR_FOOT_CONTACT_LENGTH
+    ])
+        square([
+            HOBBY_STAIR_WIDTH,
+            HOBBY_STAIR_FOOT_CONTACT_LENGTH
+        ]);
 }
 
 

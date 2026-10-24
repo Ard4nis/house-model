@@ -23,3 +23,15 @@ module feature_markers_preview(
         z = z
     );
 }
+
+
+// ===========================================================================
+// Floor engravings
+// ===========================================================================
+//
+// Plan markers cut into the printable floor surface.
+//
+
+module floor_engravings_3d(depth) {
+    alrum_skylight_engraving_3d(depth);
+}

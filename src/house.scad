@@ -57,7 +57,8 @@ include <house/print.scad>
 
 
 // "preview"  development scene: everything below, controlled by SHOW_*.
-// "print"    printable solids only: base, walls, half-walls, stairs.
+// "print"    printable solids only: engraved base, walls, half-walls,
+//            stair (see PRINT_PIECE).
 OUTPUT_MODE = "preview";
 
 
@@ -68,6 +69,7 @@ OUTPUT_MODE = "preview";
 //   "north_block"
 //   "addition_2013"
 //   "extension"
+//   "stair"          the hobby room stair, laid on its side
 PRINT_PIECE = "all";
 
 
@@ -777,7 +779,7 @@ module house() {
 
 
     if (SHOW_BASE) {
-        printable_base_3d();
+        printable_floor_3d();
     }
 
 
@@ -848,20 +850,13 @@ module scene() {
 //
 // Miniature scaling occurs only here.
 //
-// In print mode the model is also lifted so the base underside sits on the
-// print bed (Z = 0). House coordinates themselves are unchanged.
+// In print mode, print_output_3d() also places each piece on the print bed
+// (Z = 0). House coordinates themselves are unchanged.
 //
-
-OUTPUT_LIFT_Z =
-    OUTPUT_MODE == "print"
-        ? -BASE_BOTTOM_Z
-        : 0;
-
 
 scale([
     MINIATURE_SCALE,
     MINIATURE_SCALE,
     MINIATURE_SCALE
 ])
-    translate([0, 0, OUTPUT_LIFT_Z])
-        scene();
+    scene();

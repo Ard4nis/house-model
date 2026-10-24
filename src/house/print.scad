@@ -12,7 +12,10 @@
  *   north_block     Nova, green bathroom, master bedroom, krea, Bryggers,
  *                   Alrum
  *   addition_2013   Caleb, hallway, pink bathroom, playroom (+ corridor)
- *   extension       office, tech room, hobby room, stair
+ *   extension       office, tech room, hobby room
+ *
+ * plus the hobby room stair as a fifth, separate piece, printed on its
+ * side so its open underside needs no supports.
  *
  * Each legacy wall keeps 200 mm (4 mm printed at 1:50) on either side of
  * its seam.
@@ -74,6 +77,31 @@ PRINT_JOINT_TOP_SKIN = 1;
 
 // Tabs per seam, spread evenly along its interior length.
 PRINT_JOINTS_PER_SEAM = 3;
+
+
+// ===========================================================================
+// Stair locating nub and pocket (printed mm)
+// ===========================================================================
+//
+// The separately printed stair has a nub under its foot that drops into a
+// matching pocket in the hobby room floor, locating it against the east
+// wall. Glue on the east face and the foot.
+//
+
+// Nub height below the stair foot.
+PRINT_STAIR_NUB_HEIGHT = 0.4;
+
+// Nub inset from the edges of the foot contact strip.
+PRINT_STAIR_NUB_INSET = 0.5;
+
+
+// ===========================================================================
+// Floor engraving (printed mm)
+// ===========================================================================
+
+// Depth of plan markers (e.g. the Alrum skylight) cut into the floor.
+// 0.4 mm = two 0.2 mm layers.
+PRINT_ENGRAVE_DEPTH = 0.4;
 
 
 // ===========================================================================
@@ -172,7 +200,8 @@ PRINT_PIECES = [
     "south_block",
     "north_block",
     "addition_2013",
-    "extension"
+    "extension",
+    "stair"
 ];
 
 
@@ -322,9 +351,54 @@ module print_seam_sockets_3d(seam) {
 // Printable geometry
 // ===========================================================================
 
-// Solid architecture only. No room slabs, plan markers or helpers.
+// ---------------------------------------------------------------------------
+// Stair nub / pocket
+// ---------------------------------------------------------------------------
+
+module print_stair_nub_2d(grow = 0) {
+    offset(delta = grow - print_mm(PRINT_STAIR_NUB_INSET))
+        hobby_room_stair_foot_contact_2d();
+}
+
+
+// Added to the stair print only.
+module print_stair_nub_3d() {
+    h = print_mm(PRINT_STAIR_NUB_HEIGHT);
+
+    // Small overlap up into the stair so the nub fuses to it.
+    translate([0, 0, HOBBY_STAIR_BOTTOM_Z - h])
+        linear_extrude(height = h + 1)
+            print_stair_nub_2d();
+}
+
+
+// Cut from the extension floor.
+module print_stair_pocket_3d() {
+    c = print_mm(PRINT_JOINT_CLEARANCE);
+    h = print_mm(PRINT_STAIR_NUB_HEIGHT);
+
+    translate([0, 0, HOBBY_STAIR_BOTTOM_Z - h - c])
+        linear_extrude(height = h + c + 1)
+            print_stair_nub_2d(grow = c);
+}
+
+
+// Base with plan markers engraved into the floor surface.
+module printable_floor_3d() {
+    difference() {
+        printable_base_3d();
+
+        floor_engravings_3d(
+            depth = print_mm(PRINT_ENGRAVE_DEPTH)
+        );
+    }
+}
+
+
+// Solid architecture of the house pieces. No room slabs, raised markers,
+// helpers, or stairs (the stair is its own piece).
 module house_print_parts_3d() {
-    printable_base_3d();
+    printable_floor_3d();
 
     exterior_walls_preview();
 
@@ -333,12 +407,28 @@ module house_print_parts_3d() {
     partition_walls_preview();
 
     half_walls_preview();
-
-    stairs_3d();
 }
 
 
+// Pieces in house coordinates (assembled position).
 module print_piece_3d(piece) {
+    if (piece == "stair") {
+        stairs_3d();
+
+        print_stair_nub_3d();
+    } else if (piece == "extension") {
+        difference() {
+            print_house_piece_3d(piece);
+
+            print_stair_pocket_3d();
+        }
+    } else {
+        print_house_piece_3d(piece);
+    }
+}
+
+
+module print_house_piece_3d(piece) {
     difference() {
         union() {
             intersection() {
@@ -363,13 +453,38 @@ module print_piece_3d(piece) {
 }
 
 
-// piece = "all" gives every piece in place (assembly check).
+// The stair laid on its side: its width (house X) becomes height, so the
+// stepped side profile sits flat on the bed and the open underside needs no
+// supports. The nub ends up as a thin rib along one edge.
+module print_stair_on_side_3d() {
+    rotate([0, -90, 0])
+        translate([
+            -HOBBY_STAIR_X,
+            -HOBBY_STAIR_TOP_Y,
+            -HOBBY_STAIR_BOTTOM_Z
+        ])
+            print_piece_3d("stair");
+}
+
+
+// Final print output, placed on the bed (Z = 0).
+//
+//   "all"    every piece in its assembled position (assembly check)
+//   "stair"  the stair on its side
+//   other    one house piece in its assembled position
+//
 module print_output_3d(piece = "all") {
-    if (piece == "all") {
-        for (p = PRINT_PIECES) {
-            print_piece_3d(p);
-        }
+    if (piece == "stair") {
+        print_stair_on_side_3d();
     } else {
-        print_piece_3d(piece);
+        translate([0, 0, -BASE_BOTTOM_Z]) {
+            if (piece == "all") {
+                for (p = PRINT_PIECES) {
+                    print_piece_3d(p);
+                }
+            } else {
+                print_piece_3d(piece);
+            }
+        }
     }
 }

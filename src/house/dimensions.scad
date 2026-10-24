@@ -2310,6 +2310,14 @@ HOBBY_STAIR_WAIST_VERTICAL =
     / cos(HOBBY_STAIR_ANGLE);
 
 
+// DERIVED. Length of floor the stair stands on, measured south from the
+// foot, before the soffit lifts off the floor.
+HOBBY_STAIR_FOOT_CONTACT_LENGTH =
+    HOBBY_STAIR_WAIST_VERTICAL
+    * HOBBY_STAIR_GOING
+    / HOBBY_STAIR_RISE;
+
+
 // ===========================================================================
 // Printable base
 // ===========================================================================
