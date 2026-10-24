@@ -1079,7 +1079,7 @@ MASTER_BEDROOM_EAST_PARTITION_LENGTH =
 //
 // Shown on the historical drawing as PLAN_NORTH_BEDROOM_2.
 //
-// Current model:
+// Envelope:
 //
 //   west edge:    x = 6890    (master bedroom east partition)
 //   east edge:    x = 9360
@@ -1087,7 +1087,23 @@ MASTER_BEDROOM_EAST_PARTITION_LENGTH =
 //   south edge:   y = 9400    (northern-row south partition)
 //   north edge:   y = 12600   (north exterior wall inside face)
 //
-//   clear size:   2470 x 3200 mm
+//   envelope:     2470 x 3200 mm
+//
+// The kitchen fridge / freezer alcove takes a notch out of the south-east
+// corner, up to the Bryggers south wall line:
+//
+//   x: 6890        7790   8690 8790       9360 9460
+//    ┌──────────────────────────────────────┬─┬──────
+//    │  Viktualierum / krea                 │ │ Bryggers
+//    │                      ┌───────────────┴─┴──────  9960
+//    │                      │┃                         9860
+//    ├──────────┬ door ┬────┘┃   fridge alcove (Alrum)  9400
+//    │          └──────┘     ┃                         9300
+//
+// The door to Alrum sits directly west of the notch wall.
+//
+// The notch walls and room outline are defined after the Bryggers section
+// because they depend on its anchors.
 //
 
 
@@ -1117,26 +1133,39 @@ KREA_ROOM_DEPTH =
     - KREA_ROOM_Y;
 
 
-KREA_ROOM_AREA_M2 =
-    (
-        KREA_ROOM_WIDTH
-        * KREA_ROOM_DEPTH
-    )
-    / 1000000;
+// ---------------------------------------------------------------------------
+// Door to Alrum / notch west wall
+// ---------------------------------------------------------------------------
+//
+// MEASURED (approx.): the door is ~900 mm from the master bedroom east
+// wall, and the notch wall starts directly at the door's east edge.
+//
+// Used by DOOR_KREA_ALRUM in doors.scad.
+//
+
+KREA_ALRUM_DOOR_OFFSET = 900;
+
+// PROVISIONAL. Standard rough opening.
+KREA_ALRUM_DOOR_WIDTH = 900;
+
+
+// West face of the notch west wall.
+KREA_NOTCH_PARTITION_X =
+    KREA_ROOM_X
+    + KREA_ALRUM_DOOR_OFFSET
+    + KREA_ALRUM_DOOR_WIDTH;
 
 
 // ---------------------------------------------------------------------------
 // Viktualierum / Alrum partition
 // ---------------------------------------------------------------------------
 //
-// Continues the northern-row south wall east from the master bedroom.
+// Continues the northern-row south wall east from the master bedroom,
+// ending at the notch.
 //
-// Confirmed as a full-height wall with ONE door to Alrum.
+// Has ONE door to Alrum (doors.scad).
 //
-// Solid for now. The door will be cut once its position and width are
-// known.
-//
-//   x = 6890 -> 9460   (includes the corner under the east partition)
+//   x = 6890 -> 8690
 //   y = 9300 -> 9400
 //
 
@@ -1149,8 +1178,8 @@ KREA_SOUTH_PARTITION_Y =
 
 
 KREA_SOUTH_PARTITION_LENGTH =
-    KREA_ROOM_WIDTH
-    + WALL_PARTITION;
+    KREA_NOTCH_PARTITION_X
+    - KREA_SOUTH_PARTITION_X;
 
 
 // ---------------------------------------------------------------------------
@@ -1158,24 +1187,18 @@ KREA_SOUTH_PARTITION_LENGTH =
 // ---------------------------------------------------------------------------
 //
 //   x = 9360 -> 9460
-//   y = 9400 -> 12600
+//   y = 9960 -> 12600   (starts above the notch)
 //
 // Its position is part of the northern-row chain used to derive
 // LEGACY_2013_EAST_WALL_X, leaving 2300 mm (PLAN_UTILITY_WIDTH) for the
 // Bryggers.
 //
+// Y and length are defined after the Bryggers section.
+//
 
 KREA_EAST_PARTITION_X =
     KREA_ROOM_X
     + KREA_ROOM_WIDTH;
-
-
-KREA_EAST_PARTITION_Y =
-    KREA_ROOM_Y;
-
-
-KREA_EAST_PARTITION_LENGTH =
-    KREA_ROOM_DEPTH;
 
 
 // ===========================================================================
@@ -1268,10 +1291,10 @@ BRYGGERS_SOUTH_PARTITION_LENGTH =
 // Alrum north bump
 // ===========================================================================
 //
-// Alrum / kitchen continues north beneath the Bryggers, between the
-// viktualierum / krea east partition and the 2013 legacy wall:
+// Alrum / kitchen continues north beneath the Bryggers and into the
+// notch in the viktualierum / krea, up to the 2013 legacy wall:
 //
-//   x = 9460 -> 11760
+//   x = 8790 -> 11760
 //   y = 9300 -> 9860
 //
 // Semantically part of the kitchen zone: holds the fridge and freezer.
@@ -1283,7 +1306,8 @@ BRYGGERS_SOUTH_PARTITION_LENGTH =
 //
 
 ALRUM_NORTH_BUMP_X =
-    BRYGGERS_ROOM_X;
+    KREA_NOTCH_PARTITION_X
+    + WALL_PARTITION;
 
 
 ALRUM_NORTH_BUMP_Y =
@@ -1291,7 +1315,8 @@ ALRUM_NORTH_BUMP_Y =
 
 
 ALRUM_NORTH_BUMP_WIDTH =
-    BRYGGERS_ROOM_WIDTH;
+    BRYGGERS_ROOM_EAST_X
+    - ALRUM_NORTH_BUMP_X;
 
 
 ALRUM_NORTH_BUMP_NORTH_Y =
@@ -1301,6 +1326,108 @@ ALRUM_NORTH_BUMP_NORTH_Y =
 ALRUM_NORTH_BUMP_DEPTH =
     ALRUM_NORTH_BUMP_NORTH_Y
     - ALRUM_NORTH_BUMP_Y;
+
+
+// ===========================================================================
+// Viktualierum / krea — notch
+// ===========================================================================
+//
+// Defined here because it depends on the Bryggers anchors.
+//
+
+// Notch north edge = Bryggers south room line.
+KREA_NOTCH_NORTH_Y =
+    BRYGGERS_ROOM_Y;
+
+
+// ---------------------------------------------------------------------------
+// Notch west wall
+// ---------------------------------------------------------------------------
+//
+//   x = 8690 -> 8790
+//   y = 9300 -> 9960
+//
+
+KREA_NOTCH_WEST_PARTITION_X =
+    KREA_NOTCH_PARTITION_X;
+
+
+KREA_NOTCH_WEST_PARTITION_Y =
+    KREA_SOUTH_PARTITION_Y;
+
+
+KREA_NOTCH_WEST_PARTITION_LENGTH =
+    KREA_NOTCH_NORTH_Y
+    - KREA_NOTCH_WEST_PARTITION_Y;
+
+
+// ---------------------------------------------------------------------------
+// Notch north wall
+// ---------------------------------------------------------------------------
+//
+// Continues the Bryggers south wall west to the notch west wall.
+//
+//   x = 8790 -> 9460
+//   y = 9860 -> 9960
+//
+
+KREA_NOTCH_NORTH_PARTITION_X =
+    KREA_NOTCH_WEST_PARTITION_X
+    + WALL_PARTITION;
+
+
+KREA_NOTCH_NORTH_PARTITION_Y =
+    BRYGGERS_SOUTH_PARTITION_Y;
+
+
+KREA_NOTCH_NORTH_PARTITION_LENGTH =
+    BRYGGERS_SOUTH_PARTITION_X
+    - KREA_NOTCH_NORTH_PARTITION_X;
+
+
+// ---------------------------------------------------------------------------
+// Krea east partition — Y extent
+// ---------------------------------------------------------------------------
+
+KREA_EAST_PARTITION_Y =
+    KREA_NOTCH_NORTH_Y;
+
+
+KREA_EAST_PARTITION_LENGTH =
+    HOUSE_NORTH_INTERIOR_Y
+    - KREA_EAST_PARTITION_Y;
+
+
+// ---------------------------------------------------------------------------
+// Clear room outline
+// ---------------------------------------------------------------------------
+
+KREA_ROOM_EAST_X =
+    KREA_EAST_PARTITION_X;
+
+
+KREA_ROOM_NORTH_Y =
+    HOUSE_NORTH_INTERIOR_Y;
+
+
+KREA_ROOM_POINTS = [
+    [KREA_ROOM_X,                 KREA_ROOM_Y],
+    [KREA_NOTCH_WEST_PARTITION_X, KREA_ROOM_Y],
+    [KREA_NOTCH_WEST_PARTITION_X, KREA_NOTCH_NORTH_Y],
+    [KREA_ROOM_EAST_X,            KREA_NOTCH_NORTH_Y],
+    [KREA_ROOM_EAST_X,            KREA_ROOM_NORTH_Y],
+    [KREA_ROOM_X,                 KREA_ROOM_NORTH_Y]
+];
+
+
+KREA_ROOM_AREA_M2 =
+    (
+        KREA_ROOM_WIDTH
+        * KREA_ROOM_DEPTH
+        - (KREA_ROOM_EAST_X - KREA_NOTCH_WEST_PARTITION_X)
+        * (KREA_NOTCH_NORTH_Y - KREA_ROOM_Y)
+    )
+    / 1000000;
 
 
 // ===========================================================================
@@ -1709,6 +1836,9 @@ PINK_BATHROOM_EAST_PARTITION_LENGTH =
 //
 // Its finished floor is EAST_EXTENSION_FLOOR_Z (approximately -300).
 //
+// The office and tech room stand ~60 mm higher, on
+// EXTENSION_SOUTH_ROOMS_FLOOR_Z (approximately -240).
+//
 //   x = 17140 -> 20740
 //   y = 5500  -> 12600
 //
@@ -1791,6 +1921,17 @@ EXTENSION_SOUTH_ROOMS_DEPTH = 2000;
 
 OFFICE_DEPTH =
     EXTENSION_SOUTH_ROOMS_DEPTH;
+
+
+// MEASURED (approx.).
+//
+// The office and tech room floor is ~60 mm above the hobby room floor.
+EXTENSION_SOUTH_ROOMS_FLOOR_RISE = 60;
+
+
+EXTENSION_SOUTH_ROOMS_FLOOR_Z =
+    EAST_EXTENSION_FLOOR_Z
+    + EXTENSION_SOUTH_ROOMS_FLOOR_RISE;
 
 
 OFFICE_AREA_M2 =

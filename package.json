@@ -5,7 +5,8 @@
   "description": "Development tooling for the HomeOpenSCAD house model.",
   "scripts": {
     "prepare": "husky",
-    "commitlint": "commitlint"
+    "commitlint": "commitlint",
+    "preview:watch": "node scripts/preview-watch.mjs"
   },
   "devDependencies": {
     "@commitlint/cli": "^21.2.3",

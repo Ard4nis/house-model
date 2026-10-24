@@ -8,7 +8,8 @@
  *   - ordinary internal partitions
  *   - partial-height walls
  *
- * Doors and windows are NOT modelled yet.
+ * Door openings are defined in doors.scad and subtracted in the previews.
+ * Windows are NOT modelled yet.
  *
  * All source dimensions are real-world millimetres.
  */
@@ -225,6 +226,31 @@ module krea_east_partition_2d() {
 }
 
 
+// Notch taken by the kitchen fridge / freezer alcove.
+module krea_notch_west_partition_2d() {
+    translate([
+        KREA_NOTCH_WEST_PARTITION_X,
+        KREA_NOTCH_WEST_PARTITION_Y
+    ])
+        square([
+            WALL_PARTITION,
+            KREA_NOTCH_WEST_PARTITION_LENGTH
+        ]);
+}
+
+
+module krea_notch_north_partition_2d() {
+    translate([
+        KREA_NOTCH_NORTH_PARTITION_X,
+        KREA_NOTCH_NORTH_PARTITION_Y
+    ])
+        square([
+            KREA_NOTCH_NORTH_PARTITION_LENGTH,
+            WALL_PARTITION
+        ]);
+}
+
+
 // ---------------------------------------------------------------------------
 // Bryggers / Alrum
 // ---------------------------------------------------------------------------
@@ -315,6 +341,10 @@ module partition_walls_2d() {
         krea_south_partition_2d();
 
         krea_east_partition_2d();
+
+        krea_notch_west_partition_2d();
+
+        krea_notch_north_partition_2d();
 
         bryggers_south_partition_2d();
 
@@ -440,31 +470,47 @@ module house_walls_2d() {
 // wall layout is established. It is NOT an architectural wall height.
 //
 
+// Door openings (doors.scad) are subtracted from every wall preview.
+
 module exterior_walls_preview(
     height = 1000
 ) {
-    linear_extrude(height = height)
-        exterior_walls_2d();
+    difference() {
+        linear_extrude(height = height)
+            exterior_walls_2d();
+
+        door_cuts_3d();
+    }
 }
 
 
 module legacy_walls_preview(
     height = 1000
 ) {
-    linear_extrude(height = height)
-        legacy_walls_2d();
+    difference() {
+        linear_extrude(height = height)
+            legacy_walls_2d();
+
+        door_cuts_3d();
+    }
 }
 
 
 module partition_walls_preview(
     height = 1000
 ) {
-    linear_extrude(height = height)
-        partition_walls_2d();
+    difference() {
+        union() {
+            linear_extrude(height = height)
+                partition_walls_2d();
 
-    translate([0, 0, EAST_EXTENSION_FLOOR_Z])
-        linear_extrude(height = height)
-            extension_partition_walls_2d();
+            translate([0, 0, EAST_EXTENSION_FLOOR_Z])
+                linear_extrude(height = height)
+                    extension_partition_walls_2d();
+        }
+
+        door_cuts_3d();
+    }
 }
 
 

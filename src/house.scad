@@ -40,6 +40,7 @@ include <lib/coordinates.scad>
 include <house/dimensions.scad>
 include <house/footprint.scad>
 include <house/walls.scad>
+include <house/doors.scad>
 include <house/rooms.scad>
 include <house/features.scad>
 
@@ -380,7 +381,7 @@ echo(
 );
 
 echo(
-    "Viktualierum/krea clear size:",
+    "Viktualierum/krea envelope (before notch):",
     [
         KREA_ROOM_WIDTH,
         KREA_ROOM_DEPTH
@@ -527,6 +528,11 @@ echo(
 );
 
 echo(
+    "Office / tech room floor Z:",
+    EXTENSION_SOUTH_ROOMS_FLOOR_Z
+);
+
+echo(
     "Office origin / clear size:",
     [
         OFFICE_X,
@@ -646,6 +652,18 @@ echo(
         ALRUM_SKYLIGHT_DEPTH
     ]
 );
+
+
+// ---------------------------------------------------------------------------
+// Door schedule
+// ---------------------------------------------------------------------------
+//
+// [name, axis, x, y, size_x, size_y, z, height]
+//
+
+for (door = DOORS) {
+    echo("Door:", door);
+}
 
 
 // ===========================================================================

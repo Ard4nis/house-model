@@ -3,7 +3,8 @@
  *
  * South-west room of the current extension.
  *
- * Stands on the lower current-extension floor (EAST_EXTENSION_FLOOR_Z).
+ * Stands on the raised south-room floor (EXTENSION_SOUTH_ROOMS_FLOOR_Z),
+ * ~60 mm above the hobby room.
  *
  * Defines the clear usable room space.
  *
@@ -42,7 +43,7 @@ module office_preview(
     height = 25,
     z = 25
 ) {
-    translate([0, 0, EAST_EXTENSION_FLOOR_Z + z])
+    translate([0, 0, EXTENSION_SOUTH_ROOMS_FLOOR_Z + z])
         linear_extrude(height = height)
             office_2d();
 }

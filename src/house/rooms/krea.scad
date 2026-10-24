@@ -14,16 +14,15 @@
 // ===========================================================================
 // 2D clear room
 // ===========================================================================
+//
+// Rectangle with a notch in the south-east corner taken by the kitchen
+// fridge / freezer alcove.
+//
 
 module krea_2d() {
-    translate([
-        KREA_ROOM_X,
-        KREA_ROOM_Y
-    ])
-        square([
-            KREA_ROOM_WIDTH,
-            KREA_ROOM_DEPTH
-        ]);
+    polygon(
+        points = KREA_ROOM_POINTS
+    );
 }
 
 
