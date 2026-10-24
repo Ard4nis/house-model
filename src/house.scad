@@ -41,6 +41,7 @@ include <house/dimensions.scad>
 include <house/footprint.scad>
 include <house/walls.scad>
 include <house/doors.scad>
+include <house/windows.scad>
 include <house/rooms.scad>
 include <house/features.scad>
 
@@ -76,11 +77,6 @@ SHOW_SKYLIGHT_MARKERS = true;
 // ---------------------------------------------------------------------------
 // Development-only preview dimensions
 // ---------------------------------------------------------------------------
-
-// The wall layout still uses a common diagnostic height while we establish
-// the complete floor plan.
-PREVIEW_WALL_HEIGHT = 1000;
-
 
 PREVIEW_ROOM_HEIGHT = 25;
 
@@ -201,6 +197,27 @@ echo(
 echo(
     "South block wall height — north:",
     SOUTH_BLOCK_CEILING_NORTH_HEIGHT
+);
+
+echo(
+    "Main wall height:",
+    MAIN_WALL_HEIGHT
+);
+
+echo(
+    "Hobby room wall height / top Z:",
+    [
+        HOBBY_ROOM_WALL_HEIGHT,
+        HOBBY_ROOM_WALL_TOP_Z
+    ]
+);
+
+echo(
+    "Office / tech wall height / top Z:",
+    [
+        EXTENSION_SOUTH_ROOMS_WALL_HEIGHT,
+        EXTENSION_SOUTH_ROOMS_WALL_TOP_Z
+    ]
 );
 
 echo(
@@ -665,6 +682,10 @@ for (door = DOORS) {
     echo("Door:", door);
 }
 
+for (window = WINDOWS) {
+    echo("Window:", window);
+}
+
 
 // ===========================================================================
 // House geometry
@@ -686,23 +707,17 @@ module house() {
 
 
     if (SHOW_EXTERIOR_WALLS) {
-        exterior_walls_preview(
-            height = PREVIEW_WALL_HEIGHT
-        );
+        exterior_walls_preview();
     }
 
 
     if (SHOW_LEGACY_WALLS) {
-        legacy_walls_preview(
-            height = PREVIEW_WALL_HEIGHT
-        );
+        legacy_walls_preview();
     }
 
 
     if (SHOW_PARTITION_WALLS) {
-        partition_walls_preview(
-            height = PREVIEW_WALL_HEIGHT
-        );
+        partition_walls_preview();
     }
 
 

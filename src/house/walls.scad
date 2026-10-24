@@ -8,8 +8,8 @@
  *   - ordinary internal partitions
  *   - partial-height walls
  *
- * Door openings are defined in doors.scad and subtracted in the previews.
- * Windows are NOT modelled yet.
+ * Door and window openings are defined in doors.scad / windows.scad and
+ * subtracted in the 3D wall geometry.
  *
  * All source dimensions are real-world millimetres.
  */
@@ -364,7 +364,7 @@ module partition_walls_2d() {
 // ===========================================================================
 //
 // Kept separate from the main-house partitions because they stand on the
-// lower extension floor (EAST_EXTENSION_FLOOR_Z).
+// lower extension floors; the height envelope sets their bottom and top.
 //
 
 // Has a door into the tech room (cut later).
@@ -463,53 +463,224 @@ module house_walls_2d() {
 
 
 // ===========================================================================
-// Development previews
+// Wall heights
 // ===========================================================================
 //
-// The common 1000 mm preview height is intentionally artificial while the
-// wall layout is established. It is NOT an architectural wall height.
+// Walls are extruded over the full Z range, then clipped to a height
+// envelope built from the height regions in dimensions.scad.
 //
 
-// Door openings (doors.scad) are subtracted from every wall preview.
+module south_block_height_region_2d() {
+    square([
+        WALL_HEIGHT_SOUTH_BLOCK_EAST_X,
+        WALL_HEIGHT_SOUTH_BLOCK_NORTH_Y
+    ]);
+}
 
-module exterior_walls_preview(
-    height = 1000
+
+// Extends south to Y = 0 (outside the house) so that no sliver of the
+// default region touches the extension walls only along an edge, which
+// would make the clipped walls non-manifold.
+module extension_south_height_region_2d() {
+    translate([
+        WALL_HEIGHT_EXTENSION_WEST_X,
+        0
+    ])
+        square([
+            HOUSE_MAX_WIDTH - WALL_HEIGHT_EXTENSION_WEST_X,
+            WALL_HEIGHT_EXTENSION_SPLIT_Y
+        ]);
+}
+
+
+module extension_hobby_height_region_2d() {
+    translate([
+        WALL_HEIGHT_EXTENSION_WEST_X,
+        WALL_HEIGHT_EXTENSION_SPLIT_Y
+    ])
+        square([
+            HOUSE_MAX_WIDTH - WALL_HEIGHT_EXTENSION_WEST_X,
+            HOUSE_MAX_DEPTH - WALL_HEIGHT_EXTENSION_SPLIT_Y
+        ]);
+}
+
+
+// South block, interior walls: MAIN_WALL_HEIGHT, except the south half of
+// the legacy south wall, which shows the full slope-top height
+// (SOUTH_BLOCK_CEILING_NORTH_HEIGHT) on the Hailey / Stue side.
+//
+// Interior walls do NOT follow the ceiling slope; only the exterior walls
+// do (see exterior_wall_top_cap_3d).
+module south_block_height_envelope_3d() {
+    // Profile drawn as (y, z), then extruded east along X.
+    rotate([90, 0, 90])
+        linear_extrude(height = WALL_HEIGHT_SOUTH_BLOCK_EAST_X)
+            polygon([
+                [0,                               MAIN_FLOOR_Z],
+                [WALL_HEIGHT_SOUTH_BLOCK_NORTH_Y, MAIN_FLOOR_Z],
+                [WALL_HEIGHT_SOUTH_BLOCK_NORTH_Y, MAIN_FLOOR_Z + SOUTH_BLOCK_CEILING_NORTH_HEIGHT],
+                [LEGACY_SOUTH_WALL_Y,             MAIN_FLOOR_Z + SOUTH_BLOCK_CEILING_NORTH_HEIGHT],
+                [LEGACY_SOUTH_WALL_Y,             MAIN_FLOOR_Z + MAIN_WALL_HEIGHT],
+                [0,                               MAIN_FLOOR_Z + MAIN_WALL_HEIGHT]
+            ]);
+}
+
+
+module wall_height_envelope_3d() {
+    // Default: main house and 2013 addition.
+    translate([0, 0, MAIN_FLOOR_Z])
+        linear_extrude(height = MAIN_WALL_HEIGHT)
+            difference() {
+                square([
+                    HOUSE_MAX_WIDTH,
+                    HOUSE_MAX_DEPTH
+                ]);
+
+                south_block_height_region_2d();
+
+                extension_south_height_region_2d();
+
+                extension_hobby_height_region_2d();
+            }
+
+    south_block_height_envelope_3d();
+
+    translate([0, 0, EXTENSION_SOUTH_ROOMS_FLOOR_Z])
+        linear_extrude(height = EXTENSION_SOUTH_ROOMS_WALL_HEIGHT)
+            extension_south_height_region_2d();
+
+    translate([0, 0, EAST_EXTENSION_FLOOR_Z])
+        linear_extrude(height = HOBBY_ROOM_WALL_HEIGHT)
+            extension_hobby_height_region_2d();
+}
+
+
+// ---------------------------------------------------------------------------
+// Exterior walls
+// ---------------------------------------------------------------------------
+//
+// Bottoms follow the floor regions; tops are uniform at EXTERIOR_WALL_TOP_Z
+// except over the south block slope.
+//
+// Every exterior wall south of NORTH_BLOCK_SOUTH_Y belongs to the south
+// block, so the top only depends on Y. Building the cap from Y alone avoids
+// region boundaries along wall faces, which would make the clipped walls
+// non-manifold.
+//
+
+module exterior_wall_floor_envelope_3d() {
+    top_z = WALL_EXTRUDE_TOP_Z + 1;
+
+    translate([0, 0, MAIN_FLOOR_Z])
+        linear_extrude(height = top_z - MAIN_FLOOR_Z)
+            difference() {
+                square([
+                    HOUSE_MAX_WIDTH,
+                    HOUSE_MAX_DEPTH
+                ]);
+
+                extension_south_height_region_2d();
+
+                extension_hobby_height_region_2d();
+            }
+
+    translate([0, 0, EXTENSION_SOUTH_ROOMS_FLOOR_Z])
+        linear_extrude(height = top_z - EXTENSION_SOUTH_ROOMS_FLOOR_Z)
+            extension_south_height_region_2d();
+
+    translate([0, 0, EAST_EXTENSION_FLOOR_Z])
+        linear_extrude(height = top_z - EAST_EXTENSION_FLOOR_Z)
+            extension_hobby_height_region_2d();
+}
+
+
+module exterior_wall_top_cap_3d() {
+    bottom_z = WALL_EXTRUDE_BOTTOM_Z - 1;
+
+    // Profile drawn as (y, z), then extruded east along X.
+    rotate([90, 0, 90])
+        linear_extrude(height = HOUSE_MAX_WIDTH)
+            polygon([
+                [0,                           bottom_z],
+                [HOUSE_MAX_DEPTH,             bottom_z],
+                [HOUSE_MAX_DEPTH,             EXTERIOR_WALL_TOP_Z],
+                [SOUTH_BLOCK_CEILING_NORTH_Y, EXTERIOR_WALL_TOP_Z],
+                [SOUTH_BLOCK_CEILING_SOUTH_Y, MAIN_FLOOR_Z + SOUTH_BLOCK_CEILING_SOUTH_HEIGHT],
+                [0,                           MAIN_FLOOR_Z + SOUTH_BLOCK_CEILING_SOUTH_HEIGHT]
+            ]);
+}
+
+
+module exterior_wall_height_envelope_3d() {
+    intersection() {
+        exterior_wall_floor_envelope_3d();
+
+        exterior_wall_top_cap_3d();
+    }
+}
+
+
+// Extrudes 2D wall children to their real heights.
+module walls_at_real_height_3d(
+    exterior = false
 ) {
+    intersection() {
+        translate([0, 0, WALL_EXTRUDE_BOTTOM_Z])
+            linear_extrude(height = WALL_EXTRUDE_TOP_Z - WALL_EXTRUDE_BOTTOM_Z)
+                children();
+
+        if (exterior) {
+            exterior_wall_height_envelope_3d();
+        } else {
+            wall_height_envelope_3d();
+        }
+    }
+}
+
+
+// ===========================================================================
+// Wall geometry
+// ===========================================================================
+//
+// Real wall heights, with door and window openings subtracted.
+//
+
+module opening_cuts_3d() {
+    door_cuts_3d();
+
+    window_cuts_3d();
+}
+
+
+module exterior_walls_preview() {
     difference() {
-        linear_extrude(height = height)
+        walls_at_real_height_3d(exterior = true)
             exterior_walls_2d();
 
-        door_cuts_3d();
+        opening_cuts_3d();
     }
 }
 
 
-module legacy_walls_preview(
-    height = 1000
-) {
+module legacy_walls_preview() {
     difference() {
-        linear_extrude(height = height)
+        walls_at_real_height_3d()
             legacy_walls_2d();
 
-        door_cuts_3d();
+        opening_cuts_3d();
     }
 }
 
 
-module partition_walls_preview(
-    height = 1000
-) {
+module partition_walls_preview() {
     difference() {
-        union() {
-            linear_extrude(height = height)
-                partition_walls_2d();
+        walls_at_real_height_3d() {
+            partition_walls_2d();
 
-            translate([0, 0, EAST_EXTENSION_FLOOR_Z])
-                linear_extrude(height = height)
-                    extension_partition_walls_2d();
+            extension_partition_walls_2d();
         }
 
-        door_cuts_3d();
+        opening_cuts_3d();
     }
 }
 
@@ -520,9 +691,12 @@ module half_walls_preview() {
 }
 
 
-module house_walls_preview(
-    height = 1000
-) {
-    linear_extrude(height = height)
-        house_walls_2d();
+module house_walls_preview() {
+    exterior_walls_preview();
+
+    legacy_walls_preview();
+
+    partition_walls_preview();
+
+    half_walls_preview();
 }

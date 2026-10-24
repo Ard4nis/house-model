@@ -23,6 +23,7 @@
  *   DERIVED      follows from other known layout (e.g. kitchen worktops)
  *   PLACEHOLDER  the door is known to exist, but its position is not; it is
  *                centred in its wall segment until measured
+ *   CONFIRMED    centred position checked against the house and accepted
  *
  * Must be included after dimensions.scad.
  */
@@ -90,6 +91,42 @@ function door_in_y_wall(
 
 
 // ===========================================================================
+// Southern block
+// ===========================================================================
+
+// MEASURED (approx.). Gap from the south exterior wall to the door.
+DOOR_HAILEY_STUE_SOUTH_GAP = 300;
+
+DOOR_HAILEY_STUE =
+    door_in_y_wall(
+        "Hailey / Stue",
+        wall_x = HAILEY_EAST_PARTITION_X,
+        y = HAILEY_ROOM_Y
+            + DOOR_HAILEY_STUE_SOUTH_GAP,
+        thickness = WALL_PARTITION
+    );
+
+
+// Double doors through the legacy south wall.
+//
+// MEASURED (approx.). Gap from Stue's west wall to the doors.
+DOOR_STUE_ALRUM_WEST_GAP = 1500;
+
+// MEASURED.
+DOOR_STUE_ALRUM_WIDTH = 1800;
+
+DOOR_STUE_ALRUM =
+    door_in_x_wall(
+        "Stue / Alrum (double doors, legacy wall)",
+        x = STUE_ROOM_X
+            + DOOR_STUE_ALRUM_WEST_GAP,
+        wall_y = LEGACY_SOUTH_WALL_Y,
+        thickness = WALL_LEGACY_EXTERIOR,
+        width = DOOR_STUE_ALRUM_WIDTH
+    );
+
+
+// ===========================================================================
 // Original northern block
 // ===========================================================================
 
@@ -103,6 +140,34 @@ DOOR_NOVA_ALRUM =
         wall_x = NOVA_EAST_PARTITION_X,
         y = NOVA_NORTH_PARTITION_Y
             - DOOR_NOVA_ALRUM_NORTH_GAP
+            - DOOR_DEFAULT_WIDTH,
+        thickness = WALL_PARTITION
+    );
+
+
+// MEASURED (approx.). Gap from the west exterior wall to the door.
+DOOR_NOVA_GREEN_BATHROOM_WEST_GAP = 700;
+
+DOOR_NOVA_GREEN_BATHROOM =
+    door_in_x_wall(
+        "Nova / green bathroom",
+        x = NOVA_ROOM_X
+            + DOOR_NOVA_GREEN_BATHROOM_WEST_GAP,
+        wall_y = NOVA_NORTH_PARTITION_Y,
+        thickness = WALL_PARTITION
+    );
+
+
+// MEASURED (approx.). Gap from the north exterior wall to the north edge
+// of the door.
+DOOR_GREEN_BATHROOM_NORTH_GAP = 500;
+
+DOOR_GREEN_BATHROOM_MASTER_BEDROOM =
+    door_in_y_wall(
+        "Green bathroom / master bedroom",
+        wall_x = GREEN_BATHROOM_EAST_PARTITION_X,
+        y = HOUSE_NORTH_INTERIOR_Y
+            - DOOR_GREEN_BATHROOM_NORTH_GAP
             - DOOR_DEFAULT_WIDTH,
         thickness = WALL_PARTITION
     );
@@ -209,7 +274,7 @@ DOOR_FRONT =
 // 2013 addition
 // ===========================================================================
 
-// PLACEHOLDER. Through the 2013 legacy wall, opposite the hallway.
+// CONFIRMED (centred). Through the 2013 legacy wall, opposite the hallway.
 DOOR_ALRUM_HALLWAY =
     door_in_y_wall(
         "Alrum / hallway (2013 legacy wall)",
@@ -222,7 +287,7 @@ DOOR_ALRUM_HALLWAY =
     );
 
 
-// PLACEHOLDER.
+// CONFIRMED (centred).
 DOOR_HALLWAY_PINK_BATHROOM =
     door_in_x_wall(
         "Hallway / pink bathroom",
@@ -235,7 +300,7 @@ DOOR_HALLWAY_PINK_BATHROOM =
     );
 
 
-// PLACEHOLDER.
+// CONFIRMED (centred).
 DOOR_HALLWAY_CALEB =
     door_in_x_wall(
         "Hallway / Caleb",
@@ -248,7 +313,7 @@ DOOR_HALLWAY_CALEB =
     );
 
 
-// PLACEHOLDER. The wall is only ~1000 mm long, so little room to move.
+// CONFIRMED (centred).
 DOOR_HALLWAY_PLAYROOM_CORRIDOR =
     door_in_y_wall(
         "Hallway / playroom corridor",
@@ -278,7 +343,7 @@ DOOR_PLAYROOM_CORRIDOR_PLAYROOM =
 // Current extension
 // ===========================================================================
 
-// PLACEHOLDER. Through the current-extension legacy wall, at the end of the
+// CONFIRMED (centred). Through the current-extension legacy wall, at the end of the
 // playroom corridor.
 //
 // Opens from the main floor; the hobby room floor is ~300 mm lower.
@@ -325,12 +390,38 @@ DOOR_OFFICE_HOBBY_ROOM =
     );
 
 
+// Terrace door in the north exterior wall, tight against the east wall.
+//
+// MEASURED (approx.). The full terrace-door unit is ~1200 mm wide; the door
+// leaf itself is ~1000 mm. The wall opening is the full unit.
+//
+// Its lower third is a solid panel in the door leaf. Door leaves are not
+// modelled, so the opening stays full height.
+DOOR_HOBBY_ROOM_TERRACE_WIDTH = 1200;
+
+DOOR_HOBBY_ROOM_TERRACE =
+    door_in_x_wall(
+        "Hobby room / terrace (exterior)",
+        x = EXTENSION_EAST_X
+            - DOOR_HOBBY_ROOM_TERRACE_WIDTH,
+        wall_y = HOUSE_NORTH_INTERIOR_Y,
+        thickness = WALL_EXTERIOR,
+        width = DOOR_HOBBY_ROOM_TERRACE_WIDTH,
+        z = EAST_EXTENSION_FLOOR_Z
+    );
+
+
 // ===========================================================================
 // Door schedule
 // ===========================================================================
 
 DOORS = [
+    DOOR_HAILEY_STUE,
+    DOOR_STUE_ALRUM,
+
     DOOR_NOVA_ALRUM,
+    DOOR_NOVA_GREEN_BATHROOM,
+    DOOR_GREEN_BATHROOM_MASTER_BEDROOM,
     DOOR_MASTER_BEDROOM_ALRUM,
     DOOR_KREA_ALRUM,
     DOOR_TERRACE,
@@ -345,7 +436,8 @@ DOORS = [
 
     DOOR_PLAYROOM_CORRIDOR_HOBBY_ROOM,
     DOOR_OFFICE_TECH_ROOM,
-    DOOR_OFFICE_HOBBY_ROOM
+    DOOR_OFFICE_HOBBY_ROOM,
+    DOOR_HOBBY_ROOM_TERRACE
 ];
 
 
@@ -353,16 +445,16 @@ DOORS = [
 // Geometry
 // ===========================================================================
 
-// Solid volume of one opening, slightly oversized through the wall
-// thickness so it cuts cleanly.
-module door_cut_3d(door) {
-    axis   = door[1];
-    x      = door[2];
-    y      = door[3];
-    size_x = door[4];
-    size_y = door[5];
-    z      = door[6];
-    height = door[7];
+// Solid volume of one opening record (door or window), slightly oversized
+// through the wall thickness so it cuts cleanly.
+module opening_cut_3d(opening) {
+    axis   = opening[1];
+    x      = opening[2];
+    y      = opening[3];
+    size_x = opening[4];
+    size_y = opening[5];
+    z      = opening[6];
+    height = opening[7];
 
     e = DOOR_CUT_EPSILON;
 
@@ -378,7 +470,7 @@ module door_cut_3d(door) {
 
 module door_cuts_3d() {
     for (door = DOORS) {
-        door_cut_3d(door);
+        opening_cut_3d(door);
     }
 }
 

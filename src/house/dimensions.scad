@@ -345,12 +345,14 @@ SOUTH_BLOCK_CEILING_NORTH_Y =
     NORTH_BLOCK_SOUTH_Y;
 
 
-// PROVISIONAL.
+// MEASURED (approx.). At the inside face of the south exterior wall.
 SOUTH_BLOCK_CEILING_SOUTH_HEIGHT = 2200;
 
 
-// PROVISIONAL.
-SOUTH_BLOCK_CEILING_NORTH_HEIGHT = 2600;
+// MEASURED (approx.). At the south face of the legacy south wall.
+//
+// Was 2600 (provisional) before measuring.
+SOUTH_BLOCK_CEILING_NORTH_HEIGHT = 2500;
 
 
 SOUTH_BLOCK_CEILING_RISE =
@@ -713,6 +715,23 @@ GREEN_BATHROOM_DEPTH =
 GREEN_BATHROOM_PLAN_DEPTH_DIFFERENCE =
     GREEN_BATHROOM_DEPTH
     - PLAN_NW_BATH_DEPTH;
+
+
+// ---------------------------------------------------------------------------
+// Shower (fixture reference)
+// ---------------------------------------------------------------------------
+//
+// MEASURED (approx.). In the north-west corner, against the north and west
+// exterior walls. The north-wall window starts where the shower ends.
+//
+// Recorded for the later fixtures pass; no geometry yet.
+//
+
+// East-west, out from the west wall.
+GREEN_BATHROOM_SHOWER_DEPTH = 800;
+
+// North-south, along the west wall.
+GREEN_BATHROOM_SHOWER_WIDTH = 1000;
 
 
 // ---------------------------------------------------------------------------
@@ -1809,6 +1828,20 @@ PINK_BATHROOM_DEPTH =
 
 
 // ---------------------------------------------------------------------------
+// Shower (fixture reference)
+// ---------------------------------------------------------------------------
+//
+// MEASURED (approx.). In the north-west corner; the north-wall window
+// starts where the shower ends. North-south size not yet known.
+//
+// Recorded for the later fixtures pass; no geometry yet.
+//
+
+// East-west, out from the west wall.
+PINK_BATHROOM_SHOWER_DEPTH = 800;
+
+
+// ---------------------------------------------------------------------------
 // Pink bathroom / playroom partition
 // ---------------------------------------------------------------------------
 //
@@ -2057,3 +2090,120 @@ HOBBY_ROOM_AREA_M2 =
         * HOBBY_ROOM_DEPTH
     )
     / 1000000;
+
+
+// ===========================================================================
+// Wall heights
+// ===========================================================================
+//
+// Walls are modelled at their real heights as a cutaway: each wall stops
+// at the ceiling of the room it faces.
+//
+// Height regions (plan rectangles, each with a floor and ceiling Z):
+//
+//   default       whole house                        Z 0    -> 2200
+//   south block   x 0 -> 9900,  y 0 -> 5300          Z 0    -> 2200, with the
+//                 legacy south wall's south half at 2500
+//   ext. south    x 16940 -> 21140, y 0    -> 7550   Z -240 -> 2060
+//   ext. hobby    x 16940 -> 21140, y 7550 -> 13000  Z -300 -> 2200
+//
+// Interior walls do NOT follow the south-block ceiling slope.
+//
+// EXTERIOR walls use the same regions for their bottoms (floor levels), but
+// all share one top level, EXTERIOR_WALL_TOP_Z, except in the south block
+// where they follow the slope. This keeps the outside silhouette uniform.
+//
+// Where a wall separates two regions, the region boundary runs along the
+// wall's centre line, so the wall steps at mid-thickness and each face
+// shows its own room's height. This applies to:
+//
+//   - legacy south wall:  2500 on the Hailey / Stue side,
+//                         2200 on the Nova / Alrum side
+//   - current-extension legacy wall
+//   - office / tech + hobby room partition
+//
+
+// MEASURED (approx.). Most walls in the main house and 2013 addition.
+MAIN_WALL_HEIGHT = 2200;
+
+
+// MEASURED (approx.). Above the hobby room floor.
+HOBBY_ROOM_WALL_HEIGHT = 2500;
+
+
+// MEASURED (approx.). Above the office / tech room floor.
+EXTENSION_SOUTH_ROOMS_WALL_HEIGHT = 2300;
+
+
+// ---------------------------------------------------------------------------
+// Region boundaries
+// ---------------------------------------------------------------------------
+
+// Centre line of the legacy south wall.
+WALL_HEIGHT_SOUTH_BLOCK_NORTH_Y =
+    LEGACY_SOUTH_WALL_Y
+    + WALL_LEGACY_EXTERIOR / 2;
+
+
+WALL_HEIGHT_SOUTH_BLOCK_EAST_X =
+    SOUTH_BLOCK_WIDTH;
+
+
+// Centre line of the current-extension legacy wall.
+WALL_HEIGHT_EXTENSION_WEST_X =
+    LEGACY_CURRENT_EXTENSION_WALL_X
+    + WALL_LEGACY_EXTERIOR / 2;
+
+
+// Centre line of the office / tech + hobby room partition.
+WALL_HEIGHT_EXTENSION_SPLIT_Y =
+    EXTENSION_SOUTH_ROOMS_NORTH_PARTITION_Y
+    + WALL_PARTITION / 2;
+
+
+// ---------------------------------------------------------------------------
+// Wall top levels (Z)
+// ---------------------------------------------------------------------------
+
+MAIN_WALL_TOP_Z =
+    MAIN_FLOOR_Z
+    + MAIN_WALL_HEIGHT;
+
+
+HOBBY_ROOM_WALL_TOP_Z =
+    EAST_EXTENSION_FLOOR_Z
+    + HOBBY_ROOM_WALL_HEIGHT;
+
+
+EXTENSION_SOUTH_ROOMS_WALL_TOP_Z =
+    EXTENSION_SOUTH_ROOMS_FLOOR_Z
+    + EXTENSION_SOUTH_ROOMS_WALL_HEIGHT;
+
+
+// User preference: one uniform top level for all exterior walls outside
+// the sloping south block, matching the top of that slope.
+//
+// Assumes the slope top (SOUTH_BLOCK_CEILING_NORTH_HEIGHT) is the highest
+// exterior level, so the exterior cap can depend on Y alone.
+EXTERIOR_WALL_TOP_Z =
+    MAIN_FLOOR_Z
+    + SOUTH_BLOCK_CEILING_NORTH_HEIGHT;
+
+
+// Raw wall extrusion range before clipping to the height regions.
+WALL_EXTRUDE_BOTTOM_Z =
+    min(
+        MAIN_FLOOR_Z,
+        EAST_EXTENSION_FLOOR_Z,
+        EXTENSION_SOUTH_ROOMS_FLOOR_Z
+    );
+
+
+WALL_EXTRUDE_TOP_Z =
+    max(
+        MAIN_WALL_TOP_Z,
+        MAIN_FLOOR_Z + SOUTH_BLOCK_CEILING_NORTH_HEIGHT,
+        EXTERIOR_WALL_TOP_Z,
+        HOBBY_ROOM_WALL_TOP_Z,
+        EXTENSION_SOUTH_ROOMS_WALL_TOP_Z
+    );
