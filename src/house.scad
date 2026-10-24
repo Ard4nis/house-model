@@ -255,6 +255,52 @@ echo(
 
 
 // ---------------------------------------------------------------------------
+// Nova
+// ---------------------------------------------------------------------------
+
+echo(
+    "Nova room origin:",
+    [
+        NOVA_ROOM_X,
+        NOVA_ROOM_Y
+    ]
+);
+
+echo(
+    "Nova room clear size:",
+    [
+        NOVA_ROOM_WIDTH,
+        NOVA_ROOM_DEPTH
+    ]
+);
+
+echo(
+    "Nova room plan depth difference:",
+    NOVA_ROOM_PLAN_DEPTH_DIFFERENCE
+);
+
+echo(
+    "Nova east partition:",
+    [
+        NOVA_EAST_PARTITION_X,
+        NOVA_EAST_PARTITION_Y,
+        WALL_PARTITION,
+        NOVA_EAST_PARTITION_LENGTH
+    ]
+);
+
+echo(
+    "Nova north partition:",
+    [
+        NOVA_NORTH_PARTITION_X,
+        NOVA_NORTH_PARTITION_Y,
+        NOVA_NORTH_PARTITION_LENGTH,
+        WALL_PARTITION
+    ]
+);
+
+
+// ---------------------------------------------------------------------------
 // Alrum
 // ---------------------------------------------------------------------------
 
@@ -277,16 +323,6 @@ echo(
 echo(
     "Alrum provisional north boundary:",
     ALRUM_ROOM_NORTH_Y
-);
-
-echo(
-    "Alrum west partition:",
-    [
-        ALRUM_WEST_PARTITION_X,
-        ALRUM_WEST_PARTITION_Y,
-        WALL_PARTITION,
-        ALRUM_WEST_PARTITION_LENGTH
-    ]
 );
 
 echo(

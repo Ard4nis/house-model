@@ -47,11 +47,6 @@ module exterior_walls_2d(
 // Retained former exterior walls
 // ===========================================================================
 
-
-// ---------------------------------------------------------------------------
-// Former south exterior wall
-// ---------------------------------------------------------------------------
-
 module legacy_south_wall_2d() {
     translate([
         LEGACY_SOUTH_WALL_X,
@@ -63,10 +58,6 @@ module legacy_south_wall_2d() {
         ]);
 }
 
-
-// ---------------------------------------------------------------------------
-// 2013 former east exterior wall
-// ---------------------------------------------------------------------------
 
 module legacy_2013_east_wall_2d() {
     translate([
@@ -80,10 +71,6 @@ module legacy_2013_east_wall_2d() {
 }
 
 
-// ---------------------------------------------------------------------------
-// Former east exterior wall before current extension
-// ---------------------------------------------------------------------------
-
 module legacy_current_extension_wall_2d() {
     translate([
         LEGACY_CURRENT_EXTENSION_WALL_X,
@@ -95,10 +82,6 @@ module legacy_current_extension_wall_2d() {
         ]);
 }
 
-
-// ---------------------------------------------------------------------------
-// Combined legacy walls
-// ---------------------------------------------------------------------------
 
 module legacy_walls_2d() {
     union() {
@@ -133,22 +116,39 @@ module hailey_east_partition_2d() {
 
 
 // ---------------------------------------------------------------------------
-// Western bedroom / Alrum
+// Nova / Alrum
 // ---------------------------------------------------------------------------
 //
-// Provisional north end.
+// This wall deliberately extends approximately 300 mm north of Alrum.
 //
-// This gets confirmed when the western bedroom is modelled.
+// That continuation corresponds to the small wall projection visible in the
+// Entré area of the historical floor plan.
 //
 
-module alrum_west_partition_2d() {
+module nova_east_partition_2d() {
     translate([
-        ALRUM_WEST_PARTITION_X,
-        ALRUM_WEST_PARTITION_Y
+        NOVA_EAST_PARTITION_X,
+        NOVA_EAST_PARTITION_Y
     ])
         square([
             WALL_PARTITION,
-            ALRUM_WEST_PARTITION_LENGTH
+            NOVA_EAST_PARTITION_LENGTH
+        ]);
+}
+
+
+// ---------------------------------------------------------------------------
+// Nova north wall
+// ---------------------------------------------------------------------------
+
+module nova_north_partition_2d() {
+    translate([
+        NOVA_NORTH_PARTITION_X,
+        NOVA_NORTH_PARTITION_Y
+    ])
+        square([
+            NOVA_NORTH_PARTITION_LENGTH,
+            WALL_PARTITION
         ]);
 }
 
@@ -161,7 +161,9 @@ module partition_walls_2d() {
     union() {
         hailey_east_partition_2d();
 
-        alrum_west_partition_2d();
+        nova_east_partition_2d();
+
+        nova_north_partition_2d();
     }
 }
 
@@ -174,11 +176,6 @@ module partition_walls_2d() {
 // ---------------------------------------------------------------------------
 // Alrum / kitchen half-wall
 // ---------------------------------------------------------------------------
-//
-// PLAN position only.
-//
-// Actual wall height has not yet been measured.
-//
 
 module alrum_half_wall_2d() {
     translate([
@@ -220,12 +217,8 @@ module house_walls_2d() {
 // Development previews
 // ===========================================================================
 //
-// We are currently modelling a floor-plan/cutaway model.
-//
-// The common 1000 mm preview height remains intentionally artificial while
-// the complete wall layout is established.
-//
-// Real wall heights can later replace this extrusion where useful.
+// The common 1000 mm preview height is intentionally artificial while the
+// wall layout is established. It is NOT an architectural wall height.
 //
 
 module exterior_walls_preview(

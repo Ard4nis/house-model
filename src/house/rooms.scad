@@ -15,6 +15,7 @@
 
 
 include <rooms/hailey_bedroom.scad>
+include <rooms/nova_bedroom.scad>
 include <rooms/stue.scad>
 include <rooms/alrum.scad>
 
@@ -26,6 +27,8 @@ include <rooms/alrum.scad>
 module rooms_2d() {
     union() {
         hailey_bedroom_2d();
+
+        nova_bedroom_2d();
 
         stue_2d();
 
@@ -43,6 +46,11 @@ module rooms_preview(
     z = 25
 ) {
     hailey_bedroom_preview(
+        height = height,
+        z = z
+    );
+
+    nova_bedroom_preview(
         height = height,
         z = z
     );
